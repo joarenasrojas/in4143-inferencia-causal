@@ -1,0 +1,46 @@
+# Bienvenida {.unnumbered}
+
+::: {.portada}
+<div>
+<span class="kicker">IN4143 · Análisis de datos e inferencia causal</span>
+
+Estos apuntes acompañan las clases y los videos del curso. Cada capítulo sigue el mismo hilo que su video, con las mismas cápsulas, pero va más profundo: fórmulas completas, código en **R y Python** que puedes ejecutar y ejercicios con solución.
+</div>
+<img class="hero-cast" src="assets/img/cast/hero.png" alt="Cápsula con un brote de árbol">
+:::
+
+![](assets/img/video/cierre.webp){.still fig-alt="Cápsulas celebrando frente a un bosque de árboles de decisión"}
+
+## Cómo leer estos apuntes {.unnumbered}
+
+Las cajas tienen un rol fijo. Es el mismo sistema que las diapositivas:
+
+::: {.box .key}
+**Lo que no te puedes perder.** Si solo lees estas cajas, te llevas lo esencial del capítulo.
+:::
+
+::: {.box .intuit}
+Una imagen o una analogía para entender la idea antes de la fórmula.
+:::
+
+::: {.box .def}
+La definición formal: el material de referencia para estudiar.
+:::
+
+::: {.box .warn}
+Errores comunes y supuestos que no hay que olvidar.
+:::
+
+::: {.box .turn}
+Un ejercicio para hacer en el momento. Las soluciones están al final de cada capítulo.
+:::
+
+::: {.box .paper}
+Lo que dice la literatura: resultados, cifras y referencias.
+:::
+
+El código viene en dos pestañas, **R** y **Python**. Elige una y el resto del libro te mostrará ese lenguaje.
+
+## Capítulos {.unnumbered}
+
+1. [Árboles de decisión](arboles.qmd): regresión y clasificación, cómo elige cada corte, sobreajuste, sesgo y varianza, validación cruzada, poda, métricas, bosques y boosting.

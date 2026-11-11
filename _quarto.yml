@@ -1,0 +1,46 @@
+project:
+  type: book
+  output-dir: _book
+  resources:
+    - assets/
+
+lang: es
+bibliography: references.bib
+
+book:
+  title: "Apuntes IN4143"
+  subtitle: "Análisis de datos e inferencia causal"
+  author: "José Arenas R."
+  date: "2026"
+  chapters:
+    - index.qmd
+    - arboles.qmd
+  sidebar:
+    style: floating
+  page-navigation: true
+  search: true
+
+execute:
+  freeze: auto
+  echo: true
+  warning: false
+  message: false
+
+format:
+  html:
+    theme:
+      - litera
+      - styles.scss
+    css:
+      - assets/fonts.css
+      - assets/boxes.css
+    toc: true
+    toc-depth: 2
+    toc-title: "En este capítulo"
+    number-sections: true
+    code-copy: true
+    code-overflow: wrap
+    highlight-style: github
+    fig-align: center
+    html-math-method: mathjax
+    link-external-newwindow: true

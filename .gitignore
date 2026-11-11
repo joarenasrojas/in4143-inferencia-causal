@@ -1,0 +1,5 @@
+_book/
+.quarto/
+*_cache/
+.DS_Store
+/.luarc.json

@@ -1,0 +1,22 @@
+/*-- scss:defaults --*/
+$font-family-sans-serif: "Public Sans", system-ui, sans-serif;
+$headings-font-family: "Newsreader", Georgia, serif;
+$font-family-monospace: "IBM Plex Mono", ui-monospace, monospace;
+$headings-font-weight: 600;
+$body-color: #15171C;
+$link-color: #0891B2;
+$primary: #0891B2;
+$font-size-base: 1.05rem;
+$line-height-base: 1.65;
+$code-color: #0E7490;
+
+/*-- scss:rules --*/
+h1, .h1 { letter-spacing: -0.01em; }
+h2 { border-bottom: 1.5px solid #15171C; padding-bottom: .25rem; margin-top: 2.6rem; }
+h2 .header-section-number { color: #0891B2; }
+.quarto-title .title { font-size: 2.6rem; }
+p code, li code { background: #EEF7FA; padding: 0 .25em; border-radius: 4px; }
+.panel-tabset .nav-link { font-weight: 700; letter-spacing: .04em; }
+.panel-tabset .nav-tabs .nav-link.active { color: #0891B2; border-bottom: 3px solid #0891B2; }
+figure figcaption, .figure-caption { font-family: "Public Sans"; font-size: .88rem; color: #5C6270; }
+.sidebar-title { font-family: "Newsreader"; font-weight: 600; }
