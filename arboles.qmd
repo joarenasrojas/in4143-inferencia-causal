@@ -4,7 +4,7 @@ subtitle: "Regresión, clasificación, cómo se construyen, cómo se equivocan y
 ---
 
 <div class="vidwin">
-<iframe src="https://www.youtube-nocookie.com/embed/iUxMWHeLmTw" title="Árboles de decisión · IN4143" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe src="https://www.youtube-nocookie.com/embed/bEskCcK3oAc" title="Árboles de decisión · IN4143" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 </div>
 
 ::: {.box .key}
@@ -70,6 +70,8 @@ CIAN, NARANJA, AZUL, ROJO = "#0891B2", "#FF6B1A", "#0A84FF", "#E11D48"
 
 ## Adivina quién: preguntas que parten un grupo
 
+[▶ ver en el video · 0:00](https://youtu.be/bEskCcK3oAc?t=0){.vidlink}
+
 ![Con cada respuesta, la multitud se parte en dos. Unas pocas preguntas bien elegidas encuentran a la persona secreta.](assets/img/video/adivina.webp){.still}
 
 Un árbol de decisión hace lo mismo que un jugador de *Adivina quién*. En cada paso hace una pregunta de sí o no y se queda con la mitad que corresponde. Con datos, las preguntas son del tipo «¿años en la liga < 4,5?» y, al final del camino, en vez de una persona hay un **grupo** de observaciones parecidas que comparten la misma predicción.
@@ -79,6 +81,8 @@ La mejor pregunta no es cualquiera: es la que deja **dos grupos lo más distinto
 :::
 
 ## Anatomía de un árbol
+
+[▶ ver en el video · 0:41](https://youtu.be/bEskCcK3oAc?t=41){.vidlink}
 
 ![El árbol (izquierda) y el mismo árbol visto como una partición del espacio de variables (derecha). Cada hoja corresponde a un rectángulo.](assets/img/video/particion.webp){.still}
 
@@ -95,6 +99,8 @@ La mejor pregunta no es cualquiera: es la que deja **dos grupos lo más distinto
 :::
 
 ## Árboles de regresión: el sueldo de los peloteros
+
+[▶ ver en el video · 1:28](https://youtu.be/bEskCcK3oAc?t=88){.vidlink}
 
 Queremos predecir el sueldo de un jugador a partir de los **años en la liga** (`Years`) y los **hits de la temporada anterior** (`Hits`).
 
@@ -184,6 +190,8 @@ En R, `rpart` con profundidad 2 hace un tercer corte (años < 3,5) dentro de los
 
 ## ¿Cómo elige el corte? {#sec-corte}
 
+[▶ ver en el video · 2:59](https://youtu.be/bEskCcK3oAc?t=179){.vidlink}
+
 ¿Por qué 4,5 años y no 3 o 6? El algoritmo **prueba todos los cortes posibles en todas las variables** y elige el que minimiza la suma de residuos al cuadrado:
 
 ::: {.hero}
@@ -251,6 +259,8 @@ Es **codiciosa** (*greedy*): en cada paso elige el mejor corte de ese momento, s
 :::
 
 ## Árboles de clasificación
+
+[▶ ver en el video · 3:53](https://youtu.be/bEskCcK3oAc?t=233){.vidlink}
 
 ![En la clínica, cada nodo es un frasco: queremos frascos puros, de un solo color.](assets/img/video/frascos.webp){.still}
 
@@ -324,6 +334,8 @@ print(export_text(arbol_mora, feature_names=list(Xd.columns), decimals=0, show_w
 
 ## Sobreajuste y el trade-off sesgo–varianza
 
+[▶ ver en el video · 5:06](https://youtu.be/bEskCcK3oAc?t=306){.vidlink} [▶ ver en el video: sesgo y varianza · 6:15](https://youtu.be/bEskCcK3oAc?t=375){.vidlink}
+
 ![Si lo dejamos crecer, el árbol termina con una hoja por observación: error de entrenamiento cero.](assets/img/video/arbol_gigante.webp){.still}
 
 Cada pregunta nueva baja el error en los datos de entrenamiento. Si nunca paramos, cada observación queda sola en su hoja y el error de entrenamiento llega a **cero**. Pero con datos nuevos el árbol se equivoca una y otra vez: no aprendió el patrón, **memorizó el ruido**.
@@ -391,6 +403,8 @@ La curva de prueba con una sola partición es **ruidosa**: depende de qué jugad
 
 ## Separar la muestra {#sec-separar}
 
+[▶ ver en el video · 7:06](https://youtu.be/bEskCcK3oAc?t=426){.vidlink} [▶ ver en el video: doble clic: conjunto de prueba · 5:31](https://youtu.be/bEskCcK3oAc?t=331){.vidlink}
+
 ![La muestra se reparte al azar en tres grupos, cada uno con un rol. La prueba se guarda bajo llave hasta el final.](assets/img/diag/split3.png){.still}
 
 ::: {.box .def}
@@ -408,6 +422,8 @@ La partición se hace **al azar**, para que los tres grupos se parezcan.
 :::
 
 ## Validación cruzada
+
+[▶ ver en el video · 7:42](https://youtu.be/bEskCcK3oAc?t=462){.vidlink}
 
 Con pocos datos, un solo grupo de validación es ruidoso. La **validación cruzada con K grupos** (*K-fold*) lo resuelve: se divide el entrenamiento en K partes, se entrena con K−1, se valida con la restante y se rota hasta que cada parte fue validación una vez.
 
@@ -540,6 +556,8 @@ curvas1 = {
 
 ## Poda {#sec-poda}
 
+[▶ ver en el video · 8:37](https://youtu.be/bEskCcK3oAc?t=517){.vidlink}
+
 ![A medida que α sube, se caen las ramas que aportan poco.](assets/img/video/poda.webp){.still}
 
 Una opción es **frenar antes**, con una profundidad máxima o un mínimo de observaciones por hoja. Lo usual, sin embargo, es dejar crecer un árbol grande $T_0$ y luego **podarlo**: una regla de parada puede detenerse antes de un corte que parecía malo pero que habilitaba cortes muy buenos más abajo.
@@ -595,6 +613,8 @@ Breiman, Friedman, Olshen y Stone propusieron CART en 1984. La poda por costo–
 
 ## Métricas de regresión
 
+[▶ ver en el video · 9:24](https://youtu.be/bEskCcK3oAc?t=564){.vidlink}
+
 ![Cada error dibuja un cuadrado: el outlier aplasta a todos los demás.](assets/img/video/outlier.webp){.still}
 
 ::: {.box .def}
@@ -633,6 +653,8 @@ Si los errores grandes son graves (por ejemplo, subestimar la demanda de un hosp
 :::
 
 ## Métricas de clasificación
+
+[▶ ver en el video · 10:22](https://youtu.be/bEskCcK3oAc?t=622){.vidlink}
 
 ### De la probabilidad a la clase: el umbral
 
@@ -722,6 +744,8 @@ Fíjate en que la exactitud casi no cambia entre umbrales y apenas supera a «si
 :::
 
 ### La curva ROC y el AUC
+
+[▶ ver en el video: doble clic: curva ROC · 11:44](https://youtu.be/bEskCcK3oAc?t=704){.vidlink}
 
 Cada umbral produce una matriz de confusión distinta. La **curva ROC** las resume todas en un solo gráfico: para cada umbral posible dibuja un punto con
 
@@ -820,6 +844,8 @@ plt.xlabel("Tasa de falsos positivos"); plt.ylabel("Recall"); plt.show()
 
 ## Del árbol al bosque
 
+[▶ ver en el video · 12:18](https://youtu.be/bEskCcK3oAc?t=738){.vidlink}
+
 ![Bagging: muchas muestras bootstrap, un árbol en cada una, y se promedia.](assets/img/video/bosque.webp){.still}
 
 Un árbol solo es **inestable**: si cambias unos pocos datos, el primer corte puede ser otro, y como todo lo demás cuelga de ese corte, sale un árbol muy distinto. Eso es varianza alta. La solución es plantar muchos árboles y promediarlos, porque **promediar reduce la varianza**: los errores de un árbol se compensan con los de otro.
@@ -827,6 +853,8 @@ Un árbol solo es **inestable**: si cambias unos pocos datos, el primer corte pu
 El problema es que tenemos una sola muestra. ¿De dónde sacamos muchas muestras distintas para crecer muchos árboles?
 
 ### Bootstrap y bagging
+
+[▶ ver en el video: doble clic: bootstrap · 12:36](https://youtu.be/bEskCcK3oAc?t=756){.vidlink}
 
 El **bootstrap** fabrica muestras nuevas a partir de la que tenemos: se sacan $n$ observaciones **al azar y con reposición**. Es como sacar una bolita de una tómbola, anotarla y **devolverla** antes de sacar la siguiente. Por eso, en cada muestra bootstrap algunas observaciones aparecen repetidas y otras no aparecen.
 
@@ -928,6 +956,8 @@ Con cientos de árboles perdemos la imagen de un solo árbol. La **importancia d
 
 ### ¿Cuántos árboles? Más no sobreajusta, pero cuesta
 
+[▶ ver en el video: doble clic: ¿más árboles sobreajustan? · 14:58](https://youtu.be/bEskCcK3oAc?t=898){.vidlink}
+
 En bagging y random forest, **agregar árboles no produce sobreajuste**. Cada árbol nuevo es otra muestra bootstrap del mismo procedimiento, y el promedio de más árboles simplemente se **estabiliza**: el error OOB baja rápido al principio y luego se queda plano. Pasados unos cientos de árboles, agregar más no mejora ni empeora; solo **cuesta más tiempo de cómputo** (y memoria), que crece en proporción al número de árboles.
 
 ::: {.panel-tabset group="lang"}
@@ -957,6 +987,8 @@ pd.DataFrame(filas).round(3)
 :::
 
 ## Boosting
+
+[▶ ver en el video · 13:51](https://youtu.be/bEskCcK3oAc?t=831){.vidlink}
 
 ![Árboles en fila: cada uno aprende los errores del anterior.](assets/img/video/boosting.webp){.still}
 
@@ -1144,6 +1176,8 @@ aucSim = {
 ```
 
 ## Resumen
+
+[▶ ver en el video: cierre · 15:33](https://youtu.be/bEskCcK3oAc?t=933){.vidlink}
 
 ::: {.box .key label="Tres ideas para llevarse"}
 1. **Un árbol parte el mundo con preguntas** y predice con el promedio (regresión) o la mayoría (clasificación) de cada región. Los cortes se eligen de forma codiciosa minimizando RSS o impureza.
