@@ -15,6 +15,12 @@ book:
   chapters:
     - index.qmd
     - arboles.qmd
+    - part: "Material complementario"
+      chapters:
+        - errores_estandar.qmd
+    - part: "Enfoque bayesiano"
+      chapters:
+        - test_and_roll.qmd
   sidebar:
     style: floating
   page-navigation: true

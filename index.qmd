@@ -44,3 +44,11 @@ El código viene en dos pestañas, **R** y **Python**. Elige una y el resto del 
 ## Capítulos {.unnumbered}
 
 1. [Árboles de decisión](arboles.qmd): regresión y clasificación, cómo elige cada corte, sobreajuste, sesgo y varianza, validación cruzada, poda, métricas, bosques y boosting.
+
+**Material complementario**
+
+2. [Errores estándar](errores_estandar.qmd): qué incertidumbre miden, a qué nivel agrupar, la receta moderna (CV1, *jackknife* y *wild cluster bootstrap*), pocos clústeres tratados, aleatorización, método delta, tests A/A y placebos.
+
+**Enfoque bayesiano**
+
+3. [Test & Roll](test_and_roll.qmd): A/B tests para decidir, la regla de elegir al ganador, el tamaño óptimo del test, de dónde sale el *prior*, el *holdout* chico y Thompson sampling.
