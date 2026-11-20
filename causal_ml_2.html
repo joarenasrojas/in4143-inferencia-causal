@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>5&nbsp; Causal ML (2): efectos heterogéneos y personalización – Apuntes IN4143</title>
+<title>3&nbsp; Causal ML (2): efectos heterogéneos y personalización – Apuntes IN4143</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -87,6 +87,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./errores_estandar.html" rel="next">
 <link href="./causal_ml_1.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -169,7 +170,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./causal_ml_1.html">Causal Machine Learning</a></li><li class="breadcrumb-item"><a href="./causal_ml_2.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./causal_ml_2.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -206,6 +207,18 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Árboles de decisión</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_ml_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_ml_2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></span></a>
+  </div>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
@@ -218,47 +231,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./errores_estandar.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Errores estándar</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Errores estándar</span></span></a>
   </div>
 </li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Enfoque bayesiano</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./test_and_roll.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Test &amp; Roll</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Causal Machine Learning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./causal_ml_1.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./causal_ml_2.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Test &amp; Roll</span></span></a>
   </div>
 </li>
       </ul>
@@ -274,12 +253,12 @@ window.Quarto = {
    
   <ul class="collapse">
   <li><a href="#preparación" id="toc-preparación" class="nav-link active" data-scroll-target="#preparación">Preparación</a></li>
-  <li><a href="#del-efecto-promedio-al-cate" id="toc-del-efecto-promedio-al-cate" class="nav-link" data-scroll-target="#del-efecto-promedio-al-cate"><span class="header-section-number">5.1</span> Del efecto promedio al CATE</a></li>
-  <li><a href="#pista-1-meta-learners" id="toc-pista-1-meta-learners" class="nav-link" data-scroll-target="#pista-1-meta-learners"><span class="header-section-number">5.2</span> Pista 1 · Meta-learners</a></li>
-  <li><a href="#pista-2-el-árbol-causal-y-la-honestidad" id="toc-pista-2-el-árbol-causal-y-la-honestidad" class="nav-link" data-scroll-target="#pista-2-el-árbol-causal-y-la-honestidad"><span class="header-section-number">5.3</span> Pista 2 · El árbol causal y la honestidad</a></li>
-  <li><a href="#el-bosque-causal" id="toc-el-bosque-causal" class="nav-link" data-scroll-target="#el-bosque-causal"><span class="header-section-number">5.4</span> El bosque causal</a></li>
-  <li><a href="#pista-3-validar-el-orden-gates-toc-y-rate" id="toc-pista-3-validar-el-orden-gates-toc-y-rate" class="nav-link" data-scroll-target="#pista-3-validar-el-orden-gates-toc-y-rate"><span class="header-section-number">5.5</span> Pista 3 · Validar el orden: GATES, TOC y RATE</a></li>
-  <li><a href="#hiperpersonalización-decidir" id="toc-hiperpersonalización-decidir" class="nav-link" data-scroll-target="#hiperpersonalización-decidir"><span class="header-section-number">5.6</span> Hiperpersonalización = decidir</a></li>
+  <li><a href="#del-efecto-promedio-al-cate" id="toc-del-efecto-promedio-al-cate" class="nav-link" data-scroll-target="#del-efecto-promedio-al-cate"><span class="header-section-number">3.1</span> Del efecto promedio al CATE</a></li>
+  <li><a href="#pista-1-meta-learners" id="toc-pista-1-meta-learners" class="nav-link" data-scroll-target="#pista-1-meta-learners"><span class="header-section-number">3.2</span> Pista 1 · Meta-learners</a></li>
+  <li><a href="#pista-2-el-árbol-causal-y-la-honestidad" id="toc-pista-2-el-árbol-causal-y-la-honestidad" class="nav-link" data-scroll-target="#pista-2-el-árbol-causal-y-la-honestidad"><span class="header-section-number">3.3</span> Pista 2 · El árbol causal y la honestidad</a></li>
+  <li><a href="#el-bosque-causal" id="toc-el-bosque-causal" class="nav-link" data-scroll-target="#el-bosque-causal"><span class="header-section-number">3.4</span> El bosque causal</a></li>
+  <li><a href="#pista-3-validar-el-orden-gates-toc-y-rate" id="toc-pista-3-validar-el-orden-gates-toc-y-rate" class="nav-link" data-scroll-target="#pista-3-validar-el-orden-gates-toc-y-rate"><span class="header-section-number">3.5</span> Pista 3 · Validar el orden: GATES, TOC y RATE</a></li>
+  <li><a href="#hiperpersonalización-decidir" id="toc-hiperpersonalización-decidir" class="nav-link" data-scroll-target="#hiperpersonalización-decidir"><span class="header-section-number">3.6</span> Hiperpersonalización = decidir</a></li>
   <li><a href="#ejercicios" id="toc-ejercicios" class="nav-link" data-scroll-target="#ejercicios">Ejercicios</a></li>
   <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
   </ul>
@@ -288,9 +267,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./causal_ml_1.html">Causal Machine Learning</a></li><li class="breadcrumb-item"><a href="./causal_ml_2.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></h1>
 <p class="subtitle lead">¿A quién le mando el cupón? Meta-learners, árbol y bosque causal, validar el orden y decidir</p>
 </div>
 
@@ -313,7 +292,7 @@ window.Quarto = {
 <ul>
 <li>El efecto <strong>promedio</strong> puede esconder clientes a los que el cupón les cambia mucho la conducta y otros a los que no les cambia nada. El <strong>CATE</strong> separa esos efectos según las características.</li>
 <li>De cada cliente vemos <strong>un solo mundo</strong> (con o sin cupón): no hay «respuesta correcta» para medir el error del CATE como en una predicción cualquiera.</li>
-<li>Los <strong>meta-learners</strong> (S, T, X, R, DR) arman el CATE con modelos de predicción comunes. El R y el DR son las ideas del capítulo 1, cliente a cliente.</li>
+<li>Los <strong>meta-learners</strong> (S, T, X, R, DR) arman el CATE con modelos de predicción comunes. El R y el DR son las ideas del <a href="./causal_ml_1.html">capítulo anterior</a>, cliente a cliente.</li>
 <li>El <strong>árbol causal</strong> corta buscando efectos distintos; la <strong>honestidad</strong> separa los datos que eligen los cortes de los que miden. El <strong>bosque causal</strong> es residuo sobre residuo en el barrio de cada cliente <span class="citation" data-cites="wager2018 athey2019grf">(<a href="arboles.html#ref-wager2018" role="doc-biblioref">Wager y Athey 2018</a>; <a href="arboles.html#ref-athey2019grf" role="doc-biblioref">Athey et&nbsp;al. 2019</a>)</span>.</li>
 <li>No se valida el efecto de cada cliente: se valida el <strong>orden</strong> (GATES, curva TOC y RATE). Y se decide <strong>por efecto</strong>, no por riesgo ni por gasto.</li>
 </ul>
@@ -327,7 +306,7 @@ window.Quarto = {
 </div>
 <section id="preparación" class="level2 unnumbered">
 <h2 class="unnumbered anchored" data-anchor-id="preparación">Preparación</h2>
-<p>Seguimos con <strong>SuperCápsula</strong> y su cupón (capítulo 1). El cupón cuesta <strong>2,0 mil pesos</strong> por cliente y sube el gasto en 3,01 mil en promedio: mandárselo a todos «conviene». La pregunta ahora es <strong>a quién</strong>.</p>
+<p>Seguimos con <strong>SuperCápsula</strong> y su cupón (<a href="./causal_ml_1.html">capítulo anterior</a>). El cupón cuesta <strong>2,0 mil pesos</strong> por cliente y sube el gasto en 3,01 mil en promedio: mandárselo a todos «conviene». La pregunta ahora es <strong>a quién</strong>.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="lang">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Python</a></li></ul>
 <div class="tab-content" data-group="lang">
@@ -356,8 +335,8 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="del-efecto-promedio-al-cate" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="del-efecto-promedio-al-cate"><span class="header-section-number">5.1</span> Del efecto promedio al CATE</h2>
+<section id="del-efecto-promedio-al-cate" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="del-efecto-promedio-al-cate"><span class="header-section-number">3.1</span> Del efecto promedio al CATE</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="assets/img/cml/v2_tres.webp" class="still img-fluid figure-img"></p>
@@ -373,7 +352,7 @@ window.Quarto = {
 <div class="box def" data-label="Definición · CATE">
 <p>El <strong>efecto condicional promedio</strong> es el efecto del tratamiento entre clientes con las mismas características: <span class="math display">\[\tau(x) = \mathbb E\left[\,Y(1) - Y(0) \mid X = x\,\right].\]</span> Sirve para <strong>decidir a quién tratar</strong>: mandar el cupón si <span class="math inline">\(\tau(x)\)</span> supera su costo. En nuestros datos, 60 de cada 100 clientes tienen un efecto verdadero mayor que 2,0.</p>
 </div>
-<p><strong>El problema de fondo.</strong> De cada cliente vemos un solo mundo. Para predecir el gasto comparamos la predicción con el gasto real; para el efecto de un cliente <strong>no hay respuesta correcta</strong> con la cual comparar. Por eso los métodos de este capítulo se arman con las ideas del capítulo 1 y se validan <strong>por grupos y por el orden</strong> en que ponen a los clientes.</p>
+<p><strong>El problema de fondo.</strong> De cada cliente vemos un solo mundo. Para predecir el gasto comparamos la predicción con el gasto real; para el efecto de un cliente <strong>no hay respuesta correcta</strong> con la cual comparar. Por eso los métodos de este capítulo se arman con las ideas del <a href="./causal_ml_1.html">capítulo anterior</a> y se validan <strong>por grupos y por el orden</strong> en que ponen a los clientes.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="assets/img/cml/v2_casa.webp" class="still img-fluid figure-img"></p>
@@ -381,18 +360,13 @@ window.Quarto = {
 </figure>
 </div>
 </section>
-<section id="pista-1-meta-learners" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="pista-1-meta-learners"><span class="header-section-number">5.2</span> Pista 1 · Meta-learners</h2>
+<section id="pista-1-meta-learners" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="pista-1-meta-learners"><span class="header-section-number">3.2</span> Pista 1 · Meta-learners</h2>
 <div class="box def" data-label="Definición · Meta-learner">
 <p>Una <strong>receta</strong> que arma el CATE con modelos de predicción comunes (bosques, <em>boosting</em>, lasso…) <span class="citation" data-cites="kunzel2019">(<a href="arboles.html#ref-kunzel2019" role="doc-biblioref">Künzel et&nbsp;al. 2019</a>)</span>. El nombre viene de que el modelo de predicción es intercambiable.</p>
 </div>
 <table class="table-striped caption-top table">
 <caption>Los cinco meta-learners, paso a paso.</caption>
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
 <thead>
 <tr class="header">
 <th></th>
@@ -404,7 +378,7 @@ window.Quarto = {
 <tr class="odd">
 <td><strong>S</strong></td>
 <td>1) Un modelo del gasto con D y X juntos. 2) Predecir a cada cliente con D = 1 y con D = 0. 3) Restar.</td>
-<td>Es el «atajo» del capítulo 1: regulariza el cupón y <strong>encoge</strong> el efecto.</td>
+<td>Es el «atajo» del <a href="./causal_ml_1.html">capítulo anterior</a>: regulariza el cupón y <strong>encoge</strong> el efecto.</td>
 </tr>
 <tr class="even">
 <td><strong>T</strong></td>
@@ -423,7 +397,7 @@ window.Quarto = {
 </tr>
 <tr class="odd">
 <td><strong>DR</strong></td>
-<td>1) El aporte AIPW de cada cliente (capítulo 1), su <strong>pseudo-resultado</strong>. 2) Predecirlo con X.</td>
+<td>1) El aporte AIPW de cada cliente (<a href="./causal_ml_1.html">capítulo anterior</a>), su <strong>pseudo-resultado</strong>. 2) Predecirlo con X.</td>
 <td>La ruta doblemente robusta, cliente a cliente <span class="citation" data-cites="kennedy2023">(<a href="arboles.html#ref-kennedy2023" role="doc-biblioref">Kennedy 2023</a>)</span>.</td>
 </tr>
 </tbody>
@@ -431,10 +405,10 @@ window.Quarto = {
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="assets/img/cml/v2_r.webp" class="still img-fluid figure-img"></p>
-<figcaption>El R-learner: las bandejas de residuos del capítulo 1, con una pendiente para los ocasionales (amarillo) y otra para los fieles (rosado).</figcaption>
+<figcaption>El R-learner: las bandejas de residuos del <a href="./causal_ml_1.html">capítulo anterior</a>, con una pendiente para los ocasionales (amarillo) y otra para los fieles (rosado).</figcaption>
 </figure>
 </div>
-<p>Con los mismos residuos del capítulo 1, la pendiente de residuo sobre residuo es 4,4 entre los ocasionales (menos de 4 compras al mes) y 1,0 entre los fieles: esa es la intuición del R-learner.</p>
+<p>Con los mismos residuos del <a href="./causal_ml_1.html">capítulo anterior</a>, la pendiente de residuo sobre residuo es 4,4 entre los ocasionales (menos de 4 compras al mes) y 1,0 entre los fieles: esa es la intuición del R-learner.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset" data-group="lang">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Python</a></li></ul>
 <div class="tab-content" data-group="lang">
@@ -484,11 +458,11 @@ dtype: float64</code></pre>
 </div>
 <p>En el caso, el error es 1,18 para el S, 1,93 para el T, 1,12 para el X, 1,70 para el R y 1,74 para el DR. En la simulación con efecto 3 para todos y 14% con cupón, el S promedia 1,5 (<strong>encoge</strong>) y el T dice que el efecto varía 2,7 mil entre clientes (<strong>inventa diferencias</strong>), cuando no varía nada; el X varía 0,8.</p>
 <div class="box warn" data-label="Ojo · R y DR con un bosque común">
-<p>La idea del R y del DR es la correcta (protegen contra la confusión, como en el capítulo 1), pero <strong>con un bosque común en la última etapa quedaron ruidosos</strong>: la última etapa predice un pseudo-resultado muy ruidoso con un modelo hecho para predecir gastos. El bosque causal es, justamente, una forma cuidadosa de hacer el R-learner, y baja el error a 0,72.</p>
+<p>La idea del R y del DR es la correcta (protegen contra la confusión, como en el <a href="./causal_ml_1.html">capítulo anterior</a>), pero <strong>con un bosque común en la última etapa quedaron ruidosos</strong>: la última etapa predice un pseudo-resultado muy ruidoso con un modelo hecho para predecir gastos. El bosque causal es, justamente, una forma cuidadosa de hacer el R-learner, y baja el error a 0,72.</p>
 </div>
 </section>
-<section id="pista-2-el-árbol-causal-y-la-honestidad" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="pista-2-el-árbol-causal-y-la-honestidad"><span class="header-section-number">5.3</span> Pista 2 · El árbol causal y la honestidad</h2>
+<section id="pista-2-el-árbol-causal-y-la-honestidad" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="pista-2-el-árbol-causal-y-la-honestidad"><span class="header-section-number">3.3</span> Pista 2 · El árbol causal y la honestidad</h2>
 <p>Un árbol de regresión (CART, clase 7) elige el corte que deja las hojas con <strong>gastos</strong> lo más distintos posible. El <strong>árbol causal</strong> cambia una sola cosa: el corte busca hojas con <strong>efectos</strong> distintos. Dentro de cada hoja hay clientes con y sin cupón que se parecen, y el efecto de la hoja se mide comparándolos: un mini-experimento <span class="citation" data-cites="atheyimbens2016">(<a href="arboles.html#ref-atheyimbens2016" role="doc-biblioref">Athey y Imbens 2016</a>)</span>. En SuperCápsula, la variable que el bosque más usa para cortar es la frecuencia de compra: los que compran menos de 4 veces al mes tienen un efecto promedio de 4,4 y los demás de 1,1.</p>
 <p><strong>La trampa.</strong> El árbol eligió cada hoja porque en estos datos su efecto se veía extremo. Si después mide el efecto de esa hoja con los mismos datos, el efecto queda inflado (la maldición del ganador) y el intervalo de confianza miente.</p>
 <div class="box def" data-label="Receta · Honestidad">
@@ -557,8 +531,8 @@ dtype: float64</code></pre>
 <p>La honestidad cuesta muestra: la mitad de los datos solo elige cortes y la otra mitad solo mide. Un trabajo de 2025 la describe como un intercambio entre sesgo y varianza: a veces ayuda y a veces estorba si solo se quiere <strong>predecir</strong> bien el efecto <span class="citation" data-cites="hou2025honesty">(<a href="arboles.html#ref-hou2025honesty" role="doc-biblioref"><span class="nocase">Hou et&nbsp;al.</span> 2025</a>)</span> (autores completos sin verificar). Para <strong>inferir</strong> (intervalos que funcionen) sigue siendo necesaria. En nuestra simulación con efecto heterogéneo y 20.000 clientes, el árbol honesto tuvo además menos error: 1,41 contra 1,50.</p>
 </div>
 </section>
-<section id="el-bosque-causal" class="level2" data-number="5.4">
-<h2 data-number="5.4" class="anchored" data-anchor-id="el-bosque-causal"><span class="header-section-number">5.4</span> El bosque causal</h2>
+<section id="el-bosque-causal" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="el-bosque-causal"><span class="header-section-number">3.4</span> El bosque causal</h2>
 <div class="box def" data-label="Receta · Bosque causal (para un cliente)">
 <ol type="1">
 <li>Entrenar muchos árboles causales honestos, cada uno con una submuestra distinta.</li>
@@ -624,8 +598,8 @@ dtype: float64</code></pre>
 </ul>
 </div>
 </section>
-<section id="pista-3-validar-el-orden-gates-toc-y-rate" class="level2" data-number="5.5">
-<h2 data-number="5.5" class="anchored" data-anchor-id="pista-3-validar-el-orden-gates-toc-y-rate"><span class="header-section-number">5.5</span> Pista 3 · Validar el orden: GATES, TOC y RATE</h2>
+<section id="pista-3-validar-el-orden-gates-toc-y-rate" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="pista-3-validar-el-orden-gates-toc-y-rate"><span class="header-section-number">3.5</span> Pista 3 · Validar el orden: GATES, TOC y RATE</h2>
 <div class="box def" data-label="Receta · GATES">
 <ol type="1">
 <li>Entrenar el bosque con una mitad de los clientes.</li>
@@ -688,8 +662,8 @@ verdad  0.72  1.81  2.70  3.80  6.04</code></pre>
 <p>Un histograma disperso de CATE <strong>no prueba</strong> heterogeneidad: el T-learner dibuja montañas donde no hay. Lo que se valida es si la escalera sube y si la curva TOC está por encima de cero.</p>
 </div>
 </section>
-<section id="hiperpersonalización-decidir" class="level2" data-number="5.6">
-<h2 data-number="5.6" class="anchored" data-anchor-id="hiperpersonalización-decidir"><span class="header-section-number">5.6</span> Hiperpersonalización = decidir</h2>
+<section id="hiperpersonalización-decidir" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="hiperpersonalización-decidir"><span class="header-section-number">3.6</span> Hiperpersonalización = decidir</h2>
 <p>La regla: <strong>mandar el cupón si el CATE estimado supera el costo</strong>. Las alternativas habituales focalizan por gasto previo (los mejores clientes) o por riesgo de fuga (los que hay que retener). Las comparamos en la mitad de prueba, mandando el cupón a la misma cantidad de clientes que elige el bosque, y medimos la ganancia con el efecto verdadero (el caso es sintético).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -1275,10 +1249,13 @@ Yadlowsky, Steve, Scott Fleming, Nigam Shah, Emma Brunskill, y Stefan Wager. 202
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="./causal_ml_1.html" class="pagination-link" aria-label="Causal ML (1): del control lineal al Double ML">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./errores_estandar.html" class="pagination-link" aria-label="Errores estándar">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Errores estándar</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

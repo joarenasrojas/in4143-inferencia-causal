@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>4&nbsp; Causal ML (1): del control lineal al Double ML – Apuntes IN4143</title>
+<title>2&nbsp; Causal ML (1): del control lineal al Double ML – Apuntes IN4143</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -88,7 +88,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href="./causal_ml_2.html" rel="next">
-<link href="./test_and_roll.html" rel="prev">
+<link href="./arboles.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -170,7 +170,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./causal_ml_1.html">Causal Machine Learning</a></li><li class="breadcrumb-item"><a href="./causal_ml_1.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./causal_ml_1.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
@@ -207,6 +207,18 @@ window.Quarto = {
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Árboles de decisión</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_ml_1.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_ml_2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></span></a>
+  </div>
+</li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
@@ -219,47 +231,13 @@ window.Quarto = {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./errores_estandar.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Errores estándar</span></span></a>
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Errores estándar</span></span></a>
   </div>
 </li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
- <span class="menu-text">Enfoque bayesiano</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./test_and_roll.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Test &amp; Roll</span></span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
- <span class="menu-text">Causal Machine Learning</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./causal_ml_1.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./causal_ml_2.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></span></a>
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Test &amp; Roll</span></span></a>
   </div>
 </li>
       </ul>
@@ -275,13 +253,13 @@ window.Quarto = {
    
   <ul class="collapse">
   <li><a href="#preparación" id="toc-preparación" class="nav-link active" data-scroll-target="#preparación">Preparación</a></li>
-  <li><a href="#el-caso-comparar-promedios" id="toc-el-caso-comparar-promedios" class="nav-link" data-scroll-target="#el-caso-comparar-promedios"><span class="header-section-number">4.1</span> El caso: comparar promedios</a></li>
-  <li><a href="#sec-fwl" id="toc-sec-fwl" class="nav-link" data-scroll-target="#sec-fwl"><span class="header-section-number">4.2</span> Pista 1 · Controlar es limpiar: FWL en tres pasos</a></li>
-  <li><a href="#de-la-recta-al-machine-learning" id="toc-de-la-recta-al-machine-learning" class="nav-link" data-scroll-target="#de-la-recta-al-machine-learning"><span class="header-section-number">4.3</span> De la recta al <em>machine learning</em></a></li>
-  <li><a href="#dos-trampas-el-atajo-y-el-sobreajuste" id="toc-dos-trampas-el-atajo-y-el-sobreajuste" class="nav-link" data-scroll-target="#dos-trampas-el-atajo-y-el-sobreajuste"><span class="header-section-number">4.4</span> Dos trampas: el atajo y el sobreajuste</a></li>
-  <li><a href="#la-receta-double-ml" id="toc-la-receta-double-ml" class="nav-link" data-scroll-target="#la-receta-double-ml"><span class="header-section-number">4.5</span> La receta Double ML</a></li>
-  <li><a href="#pista-2-doblemente-robusto-aipw" id="toc-pista-2-doblemente-robusto-aipw" class="nav-link" data-scroll-target="#pista-2-doblemente-robusto-aipw"><span class="header-section-number">4.6</span> Pista 2 · Doblemente robusto (AIPW)</a></li>
-  <li><a href="#sec-noarregla" id="toc-sec-noarregla" class="nav-link" data-scroll-target="#sec-noarregla"><span class="header-section-number">4.7</span> Lo que el <em>machine learning</em> no arregla</a></li>
+  <li><a href="#el-caso-comparar-promedios" id="toc-el-caso-comparar-promedios" class="nav-link" data-scroll-target="#el-caso-comparar-promedios"><span class="header-section-number">2.1</span> El caso: comparar promedios</a></li>
+  <li><a href="#sec-fwl" id="toc-sec-fwl" class="nav-link" data-scroll-target="#sec-fwl"><span class="header-section-number">2.2</span> Pista 1 · Controlar es limpiar: FWL en tres pasos</a></li>
+  <li><a href="#de-la-recta-al-machine-learning" id="toc-de-la-recta-al-machine-learning" class="nav-link" data-scroll-target="#de-la-recta-al-machine-learning"><span class="header-section-number">2.3</span> De la recta al <em>machine learning</em></a></li>
+  <li><a href="#dos-trampas-el-atajo-y-el-sobreajuste" id="toc-dos-trampas-el-atajo-y-el-sobreajuste" class="nav-link" data-scroll-target="#dos-trampas-el-atajo-y-el-sobreajuste"><span class="header-section-number">2.4</span> Dos trampas: el atajo y el sobreajuste</a></li>
+  <li><a href="#la-receta-double-ml" id="toc-la-receta-double-ml" class="nav-link" data-scroll-target="#la-receta-double-ml"><span class="header-section-number">2.5</span> La receta Double ML</a></li>
+  <li><a href="#pista-2-doblemente-robusto-aipw" id="toc-pista-2-doblemente-robusto-aipw" class="nav-link" data-scroll-target="#pista-2-doblemente-robusto-aipw"><span class="header-section-number">2.6</span> Pista 2 · Doblemente robusto (AIPW)</a></li>
+  <li><a href="#sec-noarregla" id="toc-sec-noarregla" class="nav-link" data-scroll-target="#sec-noarregla"><span class="header-section-number">2.7</span> Lo que el <em>machine learning</em> no arregla</a></li>
   <li><a href="#ejercicios" id="toc-ejercicios" class="nav-link" data-scroll-target="#ejercicios">Ejercicios</a></li>
   <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
   </ul>
@@ -290,9 +268,9 @@ window.Quarto = {
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./causal_ml_1.html">Causal Machine Learning</a></li><li class="breadcrumb-item"><a href="./causal_ml_1.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></h1>
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></h1>
 <p class="subtitle lead">¿Funcionó el cupón? Limpiar los confusores observados con machine learning, paso a paso</p>
 </div>
 
@@ -376,11 +354,11 @@ dtype: float64</code></pre>
 </div>
 </div>
 <div class="box warn">
-<p>Los bosques de R (<code>ranger</code>) y de Python (<code>scikit-learn</code>) no son idénticos, así que las cifras con <em>machine learning</em> <strong>difieren en el segundo decimal</strong> entre pestañas. Las del texto y las figuras son las de las simulaciones del tema (<code>05 Causal ML/codigo</code>, Python; el bosque causal del capítulo 2, <code>grf</code> en R).</p>
+<p>Los bosques de R (<code>ranger</code>) y de Python (<code>scikit-learn</code>) no son idénticos, así que las cifras con <em>machine learning</em> <strong>difieren en el segundo decimal</strong> entre pestañas. Las del texto y las figuras son las de las simulaciones del tema (<code>05 Causal ML/codigo</code>, Python; el bosque causal del <a href="./causal_ml_2.html">capítulo siguiente</a>, <code>grf</code> en R).</p>
 </div>
 </section>
-<section id="el-caso-comparar-promedios" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="el-caso-comparar-promedios"><span class="header-section-number">4.1</span> El caso: comparar promedios</h2>
+<section id="el-caso-comparar-promedios" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="el-caso-comparar-promedios"><span class="header-section-number">2.1</span> El caso: comparar promedios</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="assets/img/cml/v1_oficina.webp" class="still img-fluid figure-img"></p>
@@ -420,8 +398,8 @@ dtype: float64</code></pre>
 </div>
 </div>
 </section>
-<section id="sec-fwl" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="sec-fwl"><span class="header-section-number">4.2</span> Pista 1 · Controlar es limpiar: FWL en tres pasos</h2>
+<section id="sec-fwl" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="sec-fwl"><span class="header-section-number">2.2</span> Pista 1 · Controlar es limpiar: FWL en tres pasos</h2>
 <p>Para ver qué hace una regresión con controles, achiquemos el problema a <strong>seis clientes</strong> y una sola característica, el gasto previo. Cada número se puede seguir a mano.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -601,18 +579,18 @@ dtype: float64</code></pre>
 </div>
 </div>
 </section>
-<section id="de-la-recta-al-machine-learning" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="de-la-recta-al-machine-learning"><span class="header-section-number">4.3</span> De la recta al <em>machine learning</em></h2>
+<section id="de-la-recta-al-machine-learning" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="de-la-recta-al-machine-learning"><span class="header-section-number">2.3</span> De la recta al <em>machine learning</em></h2>
 <p>Los pasos 1 y 2 son <strong>predicciones</strong>: predecir el gasto con X y predecir el cupón con X. Y predecir es lo que el <em>machine learning</em> hace bien. Si cambiamos la recta por un bosque aleatorio, el bosque sí ve el escalón de los clientes Oro.</p>
 <div class="box def" data-label="Definición · Modelo parcialmente lineal y modelos auxiliares">
 <p><span class="math display">\[Y = \theta D + g(X) + \varepsilon, \qquad D = m(X) + v .\]</span> El efecto <span class="math inline">\(\theta\)</span> es una constante, pero <span class="math inline">\(g\)</span> y <span class="math inline">\(m\)</span> pueden tener cualquier forma. Las predicciones <span class="math inline">\(\hat\ell(X) \approx \mathbb E[Y\mid X]\)</span> y <span class="math inline">\(\hat m(X) \approx \mathbb E[D\mid X]\)</span> se llaman <strong>modelos auxiliares</strong> (<em>nuisance</em>): no buscamos interpretarlos, solo sirven para limpiar. La idea de limpiar con predicciones flexibles es de Robinson <span class="citation" data-cites="robinson1988">(<a href="arboles.html#ref-robinson1988" role="doc-biblioref">1988</a>)</span>.</p>
 </div>
 <div class="box warn">
-<p><strong>El supuesto no cambia.</strong> El método limpia lo que <strong>ve</strong>. Si hay un confusor que no está en los datos, ningún bosque lo encuentra (<a href="#sec-noarregla" class="quarto-xref"><span>Sección 4.7</span></a>).</p>
+<p><strong>El supuesto no cambia.</strong> El método limpia lo que <strong>ve</strong>. Si hay un confusor que no está en los datos, ningún bosque lo encuentra (<a href="#sec-noarregla" class="quarto-xref"><span>Sección 2.7</span></a>).</p>
 </div>
 </section>
-<section id="dos-trampas-el-atajo-y-el-sobreajuste" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="dos-trampas-el-atajo-y-el-sobreajuste"><span class="header-section-number">4.4</span> Dos trampas: el atajo y el sobreajuste</h2>
+<section id="dos-trampas-el-atajo-y-el-sobreajuste" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="dos-trampas-el-atajo-y-el-sobreajuste"><span class="header-section-number">2.4</span> Dos trampas: el atajo y el sobreajuste</h2>
 <p><strong>Trampa 1, el atajo.</strong> ¿Para qué dos modelos? Metamos D y X en un solo bosque, prediciendo el gasto, y leamos el efecto prediciendo a cada cliente con D = 1 y con D = 0. Lo probamos en 200 bases simuladas de 2.000 clientes con efecto 3 para todos: el atajo da en promedio <strong>2,2</strong>. El bosque <strong>regulariza</strong>: le baja el volumen a lo que ayuda poco a predecir, y entre dieciséis variables el cupón ayuda poco. Limpiar solo el gasto tampoco basta (2,7). Con los dos residuos, el promedio es 3,1.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -644,8 +622,8 @@ dtype: float64</code></pre>
 </div>
 <p>Con <em>cross-fitting</em>, los dos bosques problemáticos vuelven a 3,1 y 3,1. Con un bosque bien regularizado la diferencia es chica (3,0 sin y 3,1 con): el <em>cross-fitting</em> es un cinturón de seguridad.</p>
 </section>
-<section id="la-receta-double-ml" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="la-receta-double-ml"><span class="header-section-number">4.5</span> La receta Double ML</h2>
+<section id="la-receta-double-ml" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="la-receta-double-ml"><span class="header-section-number">2.5</span> La receta Double ML</h2>
 <div class="box def" data-label="Receta · Double ML (modelo parcialmente lineal)">
 <ol type="1">
 <li>Partir a los clientes en 5 grupos.</li>
@@ -702,7 +680,7 @@ Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>m.fit().summary.<span class="bu">round</span>(<span class="dv">3</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    coef  std err       t  P&gt;|t|  2.5 %  97.5 %
-D  2.988    0.117  25.501    0.0  2.758   3.217</code></pre>
+D  3.014    0.117  25.703    0.0  2.784   3.244</code></pre>
 </div>
 </div>
 </div>
@@ -716,8 +694,8 @@ D  2.988    0.117  25.501    0.0  2.758   3.217</code></pre>
 <p>Bach et al. <span class="citation" data-cites="bach2024tuning">(<a href="arboles.html#ref-bach2024tuning" role="doc-biblioref">2024</a>)</span> muestran por simulación que modelos auxiliares mal afinados sesgan el efecto. Recomiendan afinarlos (con toda la muestra o por grupo) y <strong>reportar su capacidad predictiva</strong>. En SuperCápsula, el bosque explica 62% de la varianza del gasto y 22% de la del cupón.</p>
 </div>
 </section>
-<section id="pista-2-doblemente-robusto-aipw" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="pista-2-doblemente-robusto-aipw"><span class="header-section-number">4.6</span> Pista 2 · Doblemente robusto (AIPW)</h2>
+<section id="pista-2-doblemente-robusto-aipw" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="pista-2-doblemente-robusto-aipw"><span class="header-section-number">2.6</span> Pista 2 · Doblemente robusto (AIPW)</h2>
 <div class="box def" data-label="Definición · Propensity score">
 <p>El <strong><em>propensity score</em></strong> de un cliente es su <strong>probabilidad de recibir el cupón</strong>, dadas sus características: <span class="math inline">\(e(X) = \Pr(D = 1 \mid X)\)</span>. Un cliente Oro tiene un <em>propensity</em> alto; uno ocasional, bajo.</p>
 </div>
@@ -775,8 +753,8 @@ D  2.988    0.117  25.501    0.0  2.758   3.217</code></pre>
 <p>Dividir por <span class="math inline">\(\hat e\)</span> es peligroso cuando la probabilidad es casi 0 o casi 1: un cliente con <span class="math inline">\(e = 1/100\)</span> que recibió el cupón pesa como 100. En una variante del caso donde marketing aplica la regla casi sin excepciones, 21 de cada 100 clientes tienen <span class="math inline">\(e &lt; 0{,}02\)</span> o <span class="math inline">\(e &gt; 0{,}98\)</span>, y AIPW da 4,4 (verdad 3,0). <strong>Recortar los pesos no lo arregla</strong>: no hay clientes comparables. Antes de estimar, se mira el histograma de <span class="math inline">\(\hat e\)</span> en los dos grupos.</p>
 </div>
 </section>
-<section id="sec-noarregla" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="sec-noarregla"><span class="header-section-number">4.7</span> Lo que el <em>machine learning</em> no arregla</h2>
+<section id="sec-noarregla" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="sec-noarregla"><span class="header-section-number">2.7</span> Lo que el <em>machine learning</em> no arregla</h2>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="assets/img/cml/cml_caso.png" class="still img-fluid figure-img"></p>
@@ -864,7 +842,7 @@ D  2.988    0.117  25.501    0.0  2.758   3.217</code></pre>
 <li><strong>Ahrens et al.&nbsp;(2025)</strong>, la introducción de referencia a Double ML <span class="citation" data-cites="ahrens2025">(<a href="arboles.html#ref-ahrens2025" role="doc-biblioref">Ahrens et&nbsp;al. 2025</a>)</span>, y el paper original de <strong>Chernozhukov et al.&nbsp;(2018)</strong> <span class="citation" data-cites="chernozhukov2018">(<a href="arboles.html#ref-chernozhukov2018" role="doc-biblioref">Chernozhukov et&nbsp;al. 2018</a>)</span>. El libro abierto de <strong>Chernozhukov, Hansen, Kallus, Spindler y Syrgkanis</strong> tiene el mismo arco, con <em>notebooks</em> en R y Python <span class="citation" data-cites="cck2024">(<a href="arboles.html#ref-cck2024" role="doc-biblioref">Chernozhukov et&nbsp;al. 2024</a>)</span>.</li>
 <li><strong>Robinson (1988)</strong> para el puente entre FWL y lo no lineal <span class="citation" data-cites="robinson1988">(<a href="arboles.html#ref-robinson1988" role="doc-biblioref">Robinson 1988</a>)</span>; <strong>Robins et al.&nbsp;(1994)</strong> y <strong>Bang y Robins (2005)</strong> para lo doblemente robusto <span class="citation" data-cites="robins1994 bangrobins2005">(<a href="arboles.html#ref-robins1994" role="doc-biblioref">Robins et&nbsp;al. 1994</a>; <a href="arboles.html#ref-bangrobins2005" role="doc-biblioref">Bang y Robins 2005</a>)</span>.</li>
 <li><strong>Bach et al.&nbsp;(2024)</strong> sobre afinar hiperparámetros <span class="citation" data-cites="bach2024tuning">(<a href="arboles.html#ref-bach2024tuning" role="doc-biblioref">Bach, Schacht, et&nbsp;al. 2024</a>)</span>; <strong>Hünermund et al.&nbsp;(2023)</strong> sobre malos controles <span class="citation" data-cites="hunermund2023">(<a href="arboles.html#ref-hunermund2023" role="doc-biblioref">Hünermund et&nbsp;al. 2023</a>)</span>; <strong>Knaus (2022)</strong>, guía aplicada <span class="citation" data-cites="knaus2022">(<a href="arboles.html#ref-knaus2022" role="doc-biblioref">Knaus 2022</a>)</span>.</li>
-<li>Software: <code>DoubleML</code> en R y Python <span class="citation" data-cites="doubleml2024">(<a href="arboles.html#ref-doubleml2024" role="doc-biblioref">Bach, Kurz, et&nbsp;al. 2024</a>)</span>; <code>grf</code> (R) y <code>econml</code> (Python) en el capítulo 2.</li>
+<li>Software: <code>DoubleML</code> en R y Python <span class="citation" data-cites="doubleml2024">(<a href="arboles.html#ref-doubleml2024" role="doc-biblioref">Bach, Kurz, et&nbsp;al. 2024</a>)</span>; <code>grf</code> (R) y <code>econml</code> (Python) en el <a href="./causal_ml_2.html">capítulo siguiente</a>.</li>
 </ul>
 </div>
 </section>
@@ -1323,13 +1301,13 @@ Robinson, Peter M. 1988. <span>«Root-N-Consistent Semiparametric Regression»</
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./test_and_roll.html" class="pagination-link" aria-label="Test &amp; Roll">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Test &amp; Roll</span></span>
+      <a href="./arboles.html" class="pagination-link" aria-label="Árboles de decisión">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Árboles de decisión</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
       <a href="./causal_ml_2.html" class="pagination-link" aria-label="Causal ML (2): efectos heterogéneos y personalización">
-        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
