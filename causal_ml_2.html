@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>5&nbsp; Causal ML (2): efectos heterogéneos y personalización – Apuntes IN4143</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./causal_ml_1.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-4ea9dc820be5412f16ecea9b5c24ce32.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-8c706befe239e66dfb5e146b0454584f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/boxes.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./causal_ml_1.html">Causal Machine Learning</a></li><li class="breadcrumb-item"><a href="./causal_ml_2.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Buscar" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Apuntes IN4143</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Buscar"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Bienvenida</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./arboles.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Árboles de decisión</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Material complementario</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./errores_estandar.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Errores estándar</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Enfoque bayesiano</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./test_and_roll.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Test &amp; Roll</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Causal Machine Learning</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Alternar sección">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_ml_1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_ml_2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">En este capítulo</h2>
+   
+  <ul class="collapse">
+  <li><a href="#preparación" id="toc-preparación" class="nav-link active" data-scroll-target="#preparación">Preparación</a></li>
+  <li><a href="#del-efecto-promedio-al-cate" id="toc-del-efecto-promedio-al-cate" class="nav-link" data-scroll-target="#del-efecto-promedio-al-cate"><span class="header-section-number">5.1</span> Del efecto promedio al CATE</a></li>
+  <li><a href="#pista-1-meta-learners" id="toc-pista-1-meta-learners" class="nav-link" data-scroll-target="#pista-1-meta-learners"><span class="header-section-number">5.2</span> Pista 1 · Meta-learners</a></li>
+  <li><a href="#pista-2-el-árbol-causal-y-la-honestidad" id="toc-pista-2-el-árbol-causal-y-la-honestidad" class="nav-link" data-scroll-target="#pista-2-el-árbol-causal-y-la-honestidad"><span class="header-section-number">5.3</span> Pista 2 · El árbol causal y la honestidad</a></li>
+  <li><a href="#el-bosque-causal" id="toc-el-bosque-causal" class="nav-link" data-scroll-target="#el-bosque-causal"><span class="header-section-number">5.4</span> El bosque causal</a></li>
+  <li><a href="#pista-3-validar-el-orden-gates-toc-y-rate" id="toc-pista-3-validar-el-orden-gates-toc-y-rate" class="nav-link" data-scroll-target="#pista-3-validar-el-orden-gates-toc-y-rate"><span class="header-section-number">5.5</span> Pista 3 · Validar el orden: GATES, TOC y RATE</a></li>
+  <li><a href="#hiperpersonalización-decidir" id="toc-hiperpersonalización-decidir" class="nav-link" data-scroll-target="#hiperpersonalización-decidir"><span class="header-section-number">5.6</span> Hiperpersonalización = decidir</a></li>
+  <li><a href="#ejercicios" id="toc-ejercicios" class="nav-link" data-scroll-target="#ejercicios">Ejercicios</a></li>
+  <li><a href="#referencias" id="toc-referencias" class="nav-link" data-scroll-target="#referencias">Referencias</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./causal_ml_1.html">Causal Machine Learning</a></li><li class="breadcrumb-item"><a href="./causal_ml_2.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Causal ML (2): efectos heterogéneos y personalización</span></h1>
+<p class="subtitle lead">¿A quién le mando el cupón? Meta-learners, árbol y bosque causal, validar el orden y decidir</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="box key">
+<p><strong>En este capítulo.</strong></p>
+<ul>
+<li>El efecto <strong>promedio</strong> puede esconder clientes a los que el cupón les cambia mucho la conducta y otros a los que no les cambia nada. El <strong>CATE</strong> separa esos efectos según las características.</li>
+<li>De cada cliente vemos <strong>un solo mundo</strong> (con o sin cupón): no hay «respuesta correcta» para medir el error del CATE como en una predicción cualquiera.</li>
+<li>Los <strong>meta-learners</strong> (S, T, X, R, DR) arman el CATE con modelos de predicción comunes. El R y el DR son las ideas del capítulo 1, cliente a cliente.</li>
+<li>El <strong>árbol causal</strong> corta buscando efectos distintos; la <strong>honestidad</strong> separa los datos que eligen los cortes de los que miden. El <strong>bosque causal</strong> es residuo sobre residuo en el barrio de cada cliente <span class="citation" data-cites="wager2018 athey2019grf">(<a href="arboles.html#ref-wager2018" role="doc-biblioref">Wager y Athey 2018</a>; <a href="arboles.html#ref-athey2019grf" role="doc-biblioref">Athey et&nbsp;al. 2019</a>)</span>.</li>
+<li>No se valida el efecto de cada cliente: se valida el <strong>orden</strong> (GATES, curva TOC y RATE). Y se decide <strong>por efecto</strong>, no por riesgo ni por gasto.</li>
+</ul>
+</div>
+<div class="vidwin">
+<iframe src="https://www.youtube-nocookie.com/embed/s-1vcyw7hGE" title="Causal ML · Parte 2 · IN4143" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen="">
+</iframe>
+</div>
+<div class="box noicon">
+<p><strong>Video.</strong> Este capítulo acompaña al video <a href="https://youtu.be/s-1vcyw7hGE">«Causal ML · Parte 2: ¿A quién le mando el cupón?»</a>. Las imágenes del capítulo son fotogramas de ese video.</p>
+</div>
+<section id="preparación" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="preparación">Preparación</h2>
+<p>Seguimos con <strong>SuperCápsula</strong> y su cupón (capítulo 1). El cupón cuesta <strong>2,0 mil pesos</strong> por cliente y sube el gasto en 3,01 mil en promedio: mandárselo a todos «conviene». La pregunta ahora es <strong>a quién</strong>.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="lang">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content" data-group="lang">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"codigo/cml/cml.R"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(grf)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/cml/datos_cupon.csv"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>XC <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"gasto_prev"</span>, <span class="st">"frecuencia"</span>, <span class="st">"antiguedad"</span>, <span class="st">"sens_precio"</span>, <span class="st">"edad"</span>, <span class="st">"ingreso"</span>, <span class="st">"distancia"</span>, <span class="st">"competidor"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"reclamos"</span>, <span class="st">"recencia"</span>, <span class="st">"hogar"</span>, <span class="st">"app"</span>, <span class="st">"notif"</span>, <span class="st">"abre_mail"</span>, <span class="st">"categoria"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(df[, XC]); Y <span class="ot">&lt;-</span> df<span class="sc">$</span>Y; W <span class="ot">&lt;-</span> df<span class="sc">$</span>D; tau <span class="ot">&lt;-</span> df<span class="sc">$</span>tau; COSTO <span class="ot">&lt;-</span> <span class="dv">2</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys, json, numpy <span class="im">as</span> np, pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sys.path.insert(<span class="dv">0</span>, <span class="st">"codigo/cml"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> cml, gen_datos_cupon <span class="im">as</span> G</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>G.ESCALA <span class="op">=</span> json.load(<span class="bu">open</span>(<span class="st">"data/cml/S0_parametros.json"</span>))[<span class="st">"escala_tau"</span>]   <span class="co"># escala del efecto del caso</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"data/cml/datos_cupon.csv"</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>XC <span class="op">=</span> G.X_COLS</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>X, Y, D, tau <span class="op">=</span> df[XC].to_numpy(<span class="bu">float</span>), df.Y.to_numpy(<span class="bu">float</span>), df.D.to_numpy(<span class="bu">float</span>), df.tau.to_numpy()</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">6</span>)<span class="op">;</span> idx <span class="op">=</span> rng.permutation(<span class="bu">len</span>(df))<span class="op">;</span> tr, te <span class="op">=</span> idx[: <span class="bu">len</span>(df) <span class="op">//</span> <span class="dv">2</span>], idx[<span class="bu">len</span>(df) <span class="op">//</span> <span class="dv">2</span>:]</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="del-efecto-promedio-al-cate" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="del-efecto-promedio-al-cate"><span class="header-section-number">5.1</span> Del efecto promedio al CATE</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/img/cml/v2_tres.webp" class="still img-fluid figure-img"></p>
+<figcaption>Tres clientes de SuperCápsula y lo que el cupón les cambia el gasto.</figcaption>
+</figure>
+</div>
+<p>Con el generador del caso podemos calcular el efecto verdadero de tres perfiles:</p>
+<ul>
+<li><strong>el ocasional</strong>, que compra una o dos veces al mes y cuida el precio: <strong>+6,4 mil</strong>;</li>
+<li><strong>la fiel</strong>, que compra nueve veces al mes, cupón o no cupón: <strong>+0,3 mil</strong>. Y marketing le manda el cupón 89 de cada 100 veces;</li>
+<li><strong>el cazaofertas</strong>, que solo compra con promociones: <strong>+9,3 mil</strong>.</li>
+</ul>
+<div class="box def" data-label="Definición · CATE">
+<p>El <strong>efecto condicional promedio</strong> es el efecto del tratamiento entre clientes con las mismas características: <span class="math display">\[\tau(x) = \mathbb E\left[\,Y(1) - Y(0) \mid X = x\,\right].\]</span> Sirve para <strong>decidir a quién tratar</strong>: mandar el cupón si <span class="math inline">\(\tau(x)\)</span> supera su costo. En nuestros datos, 60 de cada 100 clientes tienen un efecto verdadero mayor que 2,0.</p>
+</div>
+<p><strong>El problema de fondo.</strong> De cada cliente vemos un solo mundo. Para predecir el gasto comparamos la predicción con el gasto real; para el efecto de un cliente <strong>no hay respuesta correcta</strong> con la cual comparar. Por eso los métodos de este capítulo se arman con las ideas del capítulo 1 y se validan <strong>por grupos y por el orden</strong> en que ponen a los clientes.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/img/cml/v2_casa.webp" class="still img-fluid figure-img"></p>
+<figcaption>Le llega el cupón al teléfono. Su gemelo sin cupón nunca existe.</figcaption>
+</figure>
+</div>
+</section>
+<section id="pista-1-meta-learners" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="pista-1-meta-learners"><span class="header-section-number">5.2</span> Pista 1 · Meta-learners</h2>
+<div class="box def" data-label="Definición · Meta-learner">
+<p>Una <strong>receta</strong> que arma el CATE con modelos de predicción comunes (bosques, <em>boosting</em>, lasso…) <span class="citation" data-cites="kunzel2019">(<a href="arboles.html#ref-kunzel2019" role="doc-biblioref">Künzel et&nbsp;al. 2019</a>)</span>. El nombre viene de que el modelo de predicción es intercambiable.</p>
+</div>
+<table class="table-striped caption-top table">
+<caption>Los cinco meta-learners, paso a paso.</caption>
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Receta</th>
+<th>Ojo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>S</strong></td>
+<td>1) Un modelo del gasto con D y X juntos. 2) Predecir a cada cliente con D = 1 y con D = 0. 3) Restar.</td>
+<td>Es el «atajo» del capítulo 1: regulariza el cupón y <strong>encoge</strong> el efecto.</td>
+</tr>
+<tr class="even">
+<td><strong>T</strong></td>
+<td>1) Un modelo del gasto solo con los con cupón. 2) Otro solo con los sin cupón. 3) Predecir con los dos y restar.</td>
+<td>Los errores de los dos modelos se suman: <strong>inventa diferencias</strong>, sobre todo si un grupo es chico.</td>
+</tr>
+<tr class="odd">
+<td><strong>X</strong></td>
+<td>1) Los dos modelos del T. 2) Cruzarlos: efecto imputado <span class="math inline">\(Y - \hat\mu_0(X)\)</span> para los con cupón y <span class="math inline">\(\hat\mu_1(X) - Y\)</span> para los sin cupón. 3) Predecir esos efectos con X en cada grupo y promediar, con más peso al grupo grande.</td>
+<td>Pensado para grupos desbalanceados <span class="citation" data-cites="kunzel2019">(<a href="arboles.html#ref-kunzel2019" role="doc-biblioref">Künzel et&nbsp;al. 2019</a>)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>R</strong></td>
+<td>1) Residuos del gasto y del cupón, con <em>cross-fitting</em>. 2) Buscar una pendiente que cambie con X: regresar <span class="math inline">\(\tilde Y/\tilde D\)</span> sobre X con pesos <span class="math inline">\(\tilde D^2\)</span>.</td>
+<td>Es FWL otra vez, cliente a cliente <span class="citation" data-cites="nie2021">(<a href="arboles.html#ref-nie2021" role="doc-biblioref">Nie y Wager 2021</a>)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>DR</strong></td>
+<td>1) El aporte AIPW de cada cliente (capítulo 1), su <strong>pseudo-resultado</strong>. 2) Predecirlo con X.</td>
+<td>La ruta doblemente robusta, cliente a cliente <span class="citation" data-cites="kennedy2023">(<a href="arboles.html#ref-kennedy2023" role="doc-biblioref">Kennedy 2023</a>)</span>.</td>
+</tr>
+</tbody>
+</table>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/img/cml/v2_r.webp" class="still img-fluid figure-img"></p>
+<figcaption>El R-learner: las bandejas de residuos del capítulo 1, con una pendiente para los ocasionales (amarillo) y otra para los fieles (rosado).</figcaption>
+</figure>
+</div>
+<p>Con los mismos residuos del capítulo 1, la pendiente de residuo sobre residuo es 4,4 entre los ocasionales (menos de 4 compras al mes) y 1,0 entre los fieles: esa es la intuición del R-learner.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="lang">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content" data-group="lang">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">6</span>); idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df)); tr <span class="ot">&lt;-</span> idx[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(df) <span class="sc">/</span> <span class="dv">2</span>)]; te <span class="ot">&lt;-</span> idx[(<span class="fu">nrow</span>(df) <span class="sc">/</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="fu">nrow</span>(df)]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>Xd <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(X)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># S-learner: un modelo con D adentro</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>fS <span class="ot">&lt;-</span> <span class="fu">ranger</span>(<span class="at">x =</span> <span class="fu">cbind</span>(Xd[tr, ], <span class="at">D =</span> W[tr]), <span class="at">y =</span> Y[tr], <span class="at">num.trees =</span> <span class="dv">300</span>, <span class="at">min.node.size =</span> <span class="dv">20</span>, <span class="at">seed =</span> <span class="dv">1</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>tS <span class="ot">&lt;-</span> <span class="fu">predict</span>(fS, <span class="fu">cbind</span>(Xd[te, ], <span class="at">D =</span> <span class="dv">1</span>))<span class="sc">$</span>predictions <span class="sc">-</span> <span class="fu">predict</span>(fS, <span class="fu">cbind</span>(Xd[te, ], <span class="at">D =</span> <span class="dv">0</span>))<span class="sc">$</span>predictions</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># T-learner: un modelo por grupo</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>t1 <span class="ot">&lt;-</span> tr[W[tr] <span class="sc">==</span> <span class="dv">1</span>]; t0 <span class="ot">&lt;-</span> tr[W[tr] <span class="sc">==</span> <span class="dv">0</span>]</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>tT <span class="ot">&lt;-</span> <span class="fu">pred_y</span>(<span class="fu">bosque_y</span>(Xd[t1, ], Y[t1]), Xd[te, ]) <span class="sc">-</span> <span class="fu">pred_y</span>(<span class="fu">bosque_y</span>(Xd[t0, ], Y[t0]), Xd[te, ])</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># DR-learner: pseudo-resultado AIPW (con cross-fitting) y un bosque que lo predice</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>nu <span class="ot">&lt;-</span> <span class="fu">nuisance_aipw</span>(Y[tr], W[tr], Xd[tr, ]); g <span class="ot">&lt;-</span> <span class="fu">aipw_scores</span>(Y[tr], W[tr], nu<span class="sc">$</span>mu0, nu<span class="sc">$</span>mu1, nu<span class="sc">$</span>e, <span class="fl">0.02</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>tDR <span class="ot">&lt;-</span> <span class="fu">pred_y</span>(<span class="fu">bosque_y</span>(Xd[tr, ], g), Xd[te, ])</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>rmse <span class="ot">&lt;-</span> <span class="cf">function</span>(a) <span class="fu">sqrt</span>(<span class="fu">mean</span>((a <span class="sc">-</span> tau[te])<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">c</span>(<span class="at">S =</span> <span class="fu">rmse</span>(tS), <span class="at">T =</span> <span class="fu">rmse</span>(tT), <span class="at">DR =</span> <span class="fu">rmse</span>(tDR)), <span class="dv">2</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   S    T   DR 
+1.38 2.06 2.51 </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>args <span class="op">=</span> (Y[tr], D[tr], X[tr], X[te])</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>th <span class="op">=</span> {k: f(<span class="op">*</span>args) <span class="cf">for</span> k, f <span class="kw">in</span> [(<span class="st">"S"</span>, cml.meta_s), (<span class="st">"T"</span>, cml.meta_t), (<span class="st">"X"</span>, cml.meta_x), (<span class="st">"R"</span>, cml.meta_r), (<span class="st">"DR"</span>, cml.meta_dr)]}</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>pd.Series({k: np.sqrt(np.mean((v <span class="op">-</span> tau[te]) <span class="op">**</span> <span class="dv">2</span>)) <span class="cf">for</span> k, v <span class="kw">in</span> th.items()}).<span class="bu">round</span>(<span class="dv">2</span>)   <span class="co"># error frente al CATE verdadero</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>S     1.18
+T     1.93
+X     1.12
+R     1.70
+DR    1.74
+dtype: float64</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/img/cml/cml_s6.png" class="still img-fluid figure-img"></p>
+<figcaption>Izquierda: error de cada meta-learner frente al CATE verdadero, en el caso. Derecha: una simulación donde el efecto es 3 para todos y pocos reciben el cupón.</figcaption>
+</figure>
+</div>
+<p>En el caso, el error es 1,18 para el S, 1,93 para el T, 1,12 para el X, 1,70 para el R y 1,74 para el DR. En la simulación con efecto 3 para todos y 14% con cupón, el S promedia 1,5 (<strong>encoge</strong>) y el T dice que el efecto varía 2,7 mil entre clientes (<strong>inventa diferencias</strong>), cuando no varía nada; el X varía 0,8.</p>
+<div class="box warn" data-label="Ojo · R y DR con un bosque común">
+<p>La idea del R y del DR es la correcta (protegen contra la confusión, como en el capítulo 1), pero <strong>con un bosque común en la última etapa quedaron ruidosos</strong>: la última etapa predice un pseudo-resultado muy ruidoso con un modelo hecho para predecir gastos. El bosque causal es, justamente, una forma cuidadosa de hacer el R-learner, y baja el error a 0,72.</p>
+</div>
+</section>
+<section id="pista-2-el-árbol-causal-y-la-honestidad" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="pista-2-el-árbol-causal-y-la-honestidad"><span class="header-section-number">5.3</span> Pista 2 · El árbol causal y la honestidad</h2>
+<p>Un árbol de regresión (CART, clase 7) elige el corte que deja las hojas con <strong>gastos</strong> lo más distintos posible. El <strong>árbol causal</strong> cambia una sola cosa: el corte busca hojas con <strong>efectos</strong> distintos. Dentro de cada hoja hay clientes con y sin cupón que se parecen, y el efecto de la hoja se mide comparándolos: un mini-experimento <span class="citation" data-cites="atheyimbens2016">(<a href="arboles.html#ref-atheyimbens2016" role="doc-biblioref">Athey y Imbens 2016</a>)</span>. En SuperCápsula, la variable que el bosque más usa para cortar es la frecuencia de compra: los que compran menos de 4 veces al mes tienen un efecto promedio de 4,4 y los demás de 1,1.</p>
+<p><strong>La trampa.</strong> El árbol eligió cada hoja porque en estos datos su efecto se veía extremo. Si después mide el efecto de esa hoja con los mismos datos, el efecto queda inflado (la maldición del ganador) y el intervalo de confianza miente.</p>
+<div class="box def" data-label="Receta · Honestidad">
+<ol type="1">
+<li>Partir la muestra en dos mitades.</li>
+<li>Con la primera (los <strong>arquitectos</strong>), elegir los cortes.</li>
+<li>Con la segunda (los <strong>jueces</strong>), medir el efecto de cada hoja.</li>
+</ol>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/img/cml/v2_jueces.webp" class="still img-fluid figure-img"></p>
+<figcaption>Arquitectos y jueces: una mitad elige los cortes y la otra mide.</figcaption>
+</figure>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/img/cml/cml_s7.png" class="still img-fluid figure-img"></p>
+<figcaption>Con el efecto igual para todos no hay grupos que descubrir. Los intervalos de las hojas del árbol adaptativo cubren el efecto verdadero muy por debajo del 95%; los del árbol honesto, cerca.</figcaption>
+</figure>
+</div>
+<p>Con 2.000 clientes y efecto 3 para todos, las hojas del árbol adaptativo se separan hasta en 12,0 mil y sus intervalos cubren el 3 solo 55 de cada 100 veces; las del honesto, 96.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="lang">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content" data-group="lang">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Un solo corte, D sorteado y efecto igual para todos: ¿cuánto cubre el IC de cada hoja?</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>efecto_hoja <span class="ot">&lt;-</span> <span class="cf">function</span>(y, d) { t <span class="ot">&lt;-</span> <span class="fu">mean</span>(y[d <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">-</span> <span class="fu">mean</span>(y[d <span class="sc">==</span> <span class="dv">0</span>]); se <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">var</span>(y[d <span class="sc">==</span> <span class="dv">1</span>]) <span class="sc">/</span> <span class="fu">sum</span>(d) <span class="sc">+</span> <span class="fu">var</span>(y[d <span class="sc">==</span> <span class="dv">0</span>]) <span class="sc">/</span> <span class="fu">sum</span>(<span class="dv">1</span> <span class="sc">-</span> d)); <span class="fu">c</span>(t, se) }</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>un_corte <span class="ot">&lt;-</span> <span class="cf">function</span>(Xs, y, d) {                       <span class="co"># el corte que más separa los efectos</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  best <span class="ot">&lt;-</span> <span class="sc">-</span><span class="cn">Inf</span>; <span class="cf">for</span> (j <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">ncol</span>(Xs))) <span class="cf">for</span> (c <span class="cf">in</span> <span class="fu">quantile</span>(Xs[, j], <span class="fu">seq</span>(.<span class="dv">1</span>, .<span class="dv">9</span>, .<span class="dv">1</span>))) {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    L <span class="ot">&lt;-</span> Xs[, j] <span class="sc">&lt;=</span> c; <span class="cf">if</span> (<span class="fu">min</span>(<span class="fu">sum</span>(L <span class="sc">&amp;</span> d <span class="sc">==</span> <span class="dv">1</span>), <span class="fu">sum</span>(L <span class="sc">&amp;</span> d <span class="sc">==</span> <span class="dv">0</span>), <span class="fu">sum</span>(<span class="sc">!</span>L <span class="sc">&amp;</span> d <span class="sc">==</span> <span class="dv">1</span>), <span class="fu">sum</span>(<span class="sc">!</span>L <span class="sc">&amp;</span> d <span class="sc">==</span> <span class="dv">0</span>)) <span class="sc">&lt;</span> <span class="dv">30</span>) <span class="cf">next</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    tl <span class="ot">&lt;-</span> <span class="fu">efecto_hoja</span>(y[L], d[L])[<span class="dv">1</span>]; trr <span class="ot">&lt;-</span> <span class="fu">efecto_hoja</span>(y[<span class="sc">!</span>L], d[<span class="sc">!</span>L])[<span class="dv">1</span>]; crit <span class="ot">&lt;-</span> <span class="fu">sum</span>(L) <span class="sc">*</span> tl<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">sum</span>(<span class="sc">!</span>L) <span class="sc">*</span> trr<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (crit <span class="sc">&gt;</span> best) { best <span class="ot">&lt;-</span> crit; out <span class="ot">&lt;-</span> <span class="fu">c</span>(j, c) } }; out }</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>cubre <span class="ot">&lt;-</span> <span class="cf">function</span>(honesto, <span class="at">n =</span> <span class="dv">2000</span>) {</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df), n); Xs <span class="ot">&lt;-</span> X[i, ]; d <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="dv">1</span>, <span class="fl">0.5</span>); y <span class="ot">&lt;-</span> df<span class="sc">$</span>y0[i] <span class="sc">+</span> <span class="dv">3</span> <span class="sc">*</span> d     <span class="co"># cupón sorteado, efecto 3</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  a <span class="ot">&lt;-</span> <span class="cf">if</span> (honesto) <span class="dv">1</span><span class="sc">:</span>(n <span class="sc">/</span> <span class="dv">2</span>) <span class="cf">else</span> <span class="dv">1</span><span class="sc">:</span>n; b <span class="ot">&lt;-</span> <span class="cf">if</span> (honesto) (n <span class="sc">/</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span>n <span class="cf">else</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  cc <span class="ot">&lt;-</span> <span class="fu">un_corte</span>(Xs[a, ], y[a], d[a]); L <span class="ot">&lt;-</span> Xs[b, cc[<span class="dv">1</span>]] <span class="sc">&lt;=</span> cc[<span class="dv">2</span>]</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sapply</span>(<span class="fu">list</span>(L, <span class="sc">!</span>L), <span class="cf">function</span>(h) { e <span class="ot">&lt;-</span> <span class="fu">efecto_hoja</span>(y[b][h], d[b][h]); <span class="fu">abs</span>(e[<span class="dv">1</span>] <span class="sc">-</span> <span class="dv">3</span>) <span class="sc">&lt;=</span> <span class="fl">1.96</span> <span class="sc">*</span> e[<span class="dv">2</span>] }) }</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">7</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">adaptativo =</span> <span class="fu">mean</span>(<span class="fu">replicate</span>(<span class="dv">100</span>, <span class="fu">cubre</span>(<span class="cn">FALSE</span>))), <span class="at">honesto =</span> <span class="fu">mean</span>(<span class="fu">replicate</span>(<span class="dv">100</span>, <span class="fu">cubre</span>(<span class="cn">TRUE</span>))))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>adaptativo    honesto 
+     0.765      0.925 </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cobertura(honest, R<span class="op">=</span><span class="dv">60</span>, n<span class="op">=</span><span class="dv">2000</span>):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    c <span class="op">=</span> []</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> r <span class="kw">in</span> <span class="bu">range</span>(R):</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        d <span class="op">=</span> G.generar(n<span class="op">=</span>n, seed<span class="op">=</span><span class="dv">700_000</span> <span class="op">+</span> r, sorteo<span class="op">=</span><span class="fl">0.5</span>, tau_const<span class="op">=</span><span class="fl">3.0</span>)          <span class="co"># cupón sorteado, efecto 3 para todos</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        ct <span class="op">=</span> cml.CausalTree(max_depth<span class="op">=</span><span class="dv">3</span>, min_leaf<span class="op">=</span><span class="dv">60</span>).fit(d[XC].to_numpy(<span class="bu">float</span>), d.Y.to_numpy(<span class="bu">float</span>), d.D.to_numpy(<span class="bu">float</span>), honest<span class="op">=</span>honest, seed<span class="op">=</span>r)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        c <span class="op">+=</span> [<span class="bu">abs</span>(t <span class="op">-</span> <span class="dv">3</span>) <span class="op">&lt;=</span> <span class="fl">1.96</span> <span class="op">*</span> s <span class="cf">for</span> t, s, _ <span class="kw">in</span> ct.leaf_est.values()]</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.mean(c)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>{<span class="st">"adaptativo"</span>: <span class="bu">round</span>(cobertura(<span class="va">False</span>), <span class="dv">2</span>), <span class="st">"honesto"</span>: <span class="bu">round</span>(cobertura(<span class="va">True</span>), <span class="dv">2</span>)}</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'adaptativo': np.float64(0.53), 'honesto': np.float64(0.96)}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="box paper" data-label="Del paper · El debate de la honestidad">
+<p>La honestidad cuesta muestra: la mitad de los datos solo elige cortes y la otra mitad solo mide. Un trabajo de 2025 la describe como un intercambio entre sesgo y varianza: a veces ayuda y a veces estorba si solo se quiere <strong>predecir</strong> bien el efecto <span class="citation" data-cites="hou2025honesty">(<a href="arboles.html#ref-hou2025honesty" role="doc-biblioref"><span class="nocase">Hou et&nbsp;al.</span> 2025</a>)</span> (autores completos sin verificar). Para <strong>inferir</strong> (intervalos que funcionen) sigue siendo necesaria. En nuestra simulación con efecto heterogéneo y 20.000 clientes, el árbol honesto tuvo además menos error: 1,41 contra 1,50.</p>
+</div>
+</section>
+<section id="el-bosque-causal" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="el-bosque-causal"><span class="header-section-number">5.4</span> El bosque causal</h2>
+<div class="box def" data-label="Receta · Bosque causal (para un cliente)">
+<ol type="1">
+<li>Entrenar muchos árboles causales honestos, cada uno con una submuestra distinta.</li>
+<li>Contar en cuántos árboles el cliente cae en la misma hoja que cada otro cliente: más veces juntos, más <strong>vecino</strong>, más <strong>peso</strong> <span class="math inline">\(\alpha_i(x)\)</span>.</li>
+<li>Hacer <strong>residuo sobre residuo con esos pesos</strong>: <span class="math inline">\(\hat\tau(x) = \dfrac{\sum_i \alpha_i(x)\,\tilde Y_i \tilde D_i}{\sum_i \alpha_i(x)\,\tilde D_i^2}\)</span>. Es el teorema de Frisch, Waugh y Lovell en el barrio de cada cliente <span class="citation" data-cites="athey2019grf">(<a href="arboles.html#ref-athey2019grf" role="doc-biblioref">Athey et&nbsp;al. 2019</a>)</span>.</li>
+</ol>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/img/cml/v2_vecinos.webp" class="still img-fluid figure-img"></p>
+<figcaption>Un cliente ocasional y sus vecinos: el bosque dice 7,07; el cálculo a mano con los pesos, 7,07.</figcaption>
+</figure>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="lang">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content" data-group="lang">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>cf <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X, Y, W, <span class="at">num.trees =</span> <span class="dv">2000</span>, <span class="at">seed =</span> <span class="dv">8</span>)          <span class="co"># honesto por defecto</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>tau_oob <span class="ot">&lt;-</span> <span class="fu">predict</span>(cf, <span class="at">estimate.variance =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">ate =</span> <span class="fu">average_treatment_effect</span>(cf), <span class="at">corr =</span> <span class="fu">cor</span>(tau_oob<span class="sc">$</span>predictions, tau))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>ate.estimate  ate.std.err         corr 
+   2.9436712    0.1248088    0.9531003 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># el paso 3 a mano, para un cliente: residuo sobre residuo ponderado por sus vecinos</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">108</span>; a <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">get_forest_weights</span>(cf, <span class="at">newdata =</span> X[i, , <span class="at">drop =</span> <span class="cn">FALSE</span>]))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>Yr <span class="ot">&lt;-</span> Y <span class="sc">-</span> cf<span class="sc">$</span>Y.hat; Wr <span class="ot">&lt;-</span> W <span class="sc">-</span> cf<span class="sc">$</span>W.hat</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">bosque =</span> <span class="fu">predict</span>(cf, X[i, , <span class="at">drop =</span> <span class="cn">FALSE</span>])<span class="sc">$</span>predictions, <span class="at">a_mano =</span> <span class="fu">sum</span>(a <span class="sc">*</span> Yr <span class="sc">*</span> Wr) <span class="sc">/</span> <span class="fu">sum</span>(a <span class="sc">*</span> Wr<span class="sc">^</span><span class="dv">2</span>), <span class="at">verdad =</span> tau[i])</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  bosque   a_mano   verdad 
+7.067269 7.070309 8.719100 </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># econml no carga bajo reticulate (arrastra numba/llvmlite), así que este bloque no se ejecuta al compilar el apunte.</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Valores de una corrida aparte con Python 3.11 (econml 0.17.1, 20-nov-2026): ATE 2.938 · correlación con el CATE verdadero 0.954 · RMSE 0.732</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> econml.dml <span class="im">import</span> CausalForestDML</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.ensemble <span class="im">import</span> RandomForestRegressor, RandomForestClassifier</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>cf <span class="op">=</span> CausalForestDML(model_y<span class="op">=</span>RandomForestRegressor(<span class="dv">300</span>, min_samples_leaf<span class="op">=</span><span class="dv">20</span>, max_features<span class="op">=</span><span class="fl">0.4</span>, random_state<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>                     model_t<span class="op">=</span>RandomForestClassifier(<span class="dv">300</span>, min_samples_leaf<span class="op">=</span><span class="dv">20</span>, max_features<span class="op">=</span><span class="fl">0.4</span>, random_state<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                     discrete_treatment<span class="op">=</span><span class="va">True</span>, n_estimators<span class="op">=</span><span class="dv">1000</span>, min_samples_leaf<span class="op">=</span><span class="dv">20</span>, cv<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">8</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>cf.fit(Y, D.astype(<span class="bu">int</span>), X<span class="op">=</span>X)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>th <span class="op">=</span> cf.effect(X)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>cf.ate(X), np.corrcoef(th, tau)[<span class="dv">0</span>, <span class="dv">1</span>], np.sqrt(np.mean((th <span class="op">-</span> tau) <span class="op">**</span> <span class="dv">2</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+</div>
+<p>Para el cliente ocasional y sensible al precio del video, el bosque dice 7,07, el cálculo a mano con los pesos da 7,07 y la verdad es 8,72. En todos los clientes, la correlación entre el CATE del bosque y el verdadero es 0,95, y el promedio, 2,94 (verdad 3,01).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/img/cml/cml_s8.png" class="still img-fluid figure-img"></p>
+<figcaption>CATE del bosque contra el verdadero, y efecto promedio por quintil del CATE estimado (GATES).</figcaption>
+</figure>
+</div>
+<div class="box warn" data-label="Ojo · Lo que no hay que leer">
+<ul>
+<li><strong>Los intervalos de cada cliente</strong> cubren el efecto verdadero 89 de cada 100 veces, no 95. El efecto individual es ruidoso <span class="citation" data-cites="knaus2022">(<a href="arboles.html#ref-knaus2022" role="doc-biblioref">Knaus 2022</a>)</span>: se decide con grupos y con el orden.</li>
+<li><strong>La importancia de variables</strong> dice dónde cortó el bosque, no el efecto causal de esas variables. Leerla como causal es una práctica común y dudosa.</li>
+</ul>
+</div>
+</section>
+<section id="pista-3-validar-el-orden-gates-toc-y-rate" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="pista-3-validar-el-orden-gates-toc-y-rate"><span class="header-section-number">5.5</span> Pista 3 · Validar el orden: GATES, TOC y RATE</h2>
+<div class="box def" data-label="Receta · GATES">
+<ol type="1">
+<li>Entrenar el bosque con una mitad de los clientes.</li>
+<li>En la otra mitad, ordenar a los clientes por su CATE estimado y partirlos en cinco grupos iguales.</li>
+<li>Medir el efecto promedio de cada grupo con la ruta doblemente robusta (los aportes AIPW de un bosque entrenado en esa mitad).</li>
+</ol>
+<p>Si el orden es real, las barras suben como escalera <span class="citation" data-cites="cddf2025">(<a href="arboles.html#ref-cddf2025" role="doc-biblioref">Chernozhukov et&nbsp;al. 2025</a>)</span>.</p>
+</div>
+<div class="box def" data-label="Definición · Curva TOC y RATE">
+<p>La <strong>curva TOC</strong> mide, para cada fracción <span class="math inline">\(q\)</span> de los primeros de la fila, cuánto más efecto tienen que el promedio. Su área es el <strong>RATE</strong> <span class="citation" data-cites="yadlowsky2025">(<a href="arboles.html#ref-yadlowsky2025" role="doc-biblioref">Yadlowsky et&nbsp;al. 2025</a>)</span>. Sirve para comparar <strong>reglas para ordenar clientes</strong>: por efecto estimado, por riesgo, por gasto.</p>
+</div>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="lang">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content" data-group="lang">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">81</span>); idx <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">nrow</span>(df)); tr <span class="ot">&lt;-</span> idx[<span class="dv">1</span><span class="sc">:</span>(<span class="fu">nrow</span>(df) <span class="sc">/</span> <span class="dv">2</span>)]; te <span class="ot">&lt;-</span> idx[(<span class="fu">nrow</span>(df) <span class="sc">/</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">1</span>)<span class="sc">:</span><span class="fu">nrow</span>(df)]</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>cf_tr <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X[tr, ], Y[tr], W[tr], <span class="at">num.trees =</span> <span class="dv">2000</span>, <span class="at">seed =</span> <span class="dv">81</span>)   <span class="co"># aprende el orden</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>cf_ev <span class="ot">&lt;-</span> <span class="fu">causal_forest</span>(X[te, ], Y[te], W[te], <span class="at">num.trees =</span> <span class="dv">2000</span>, <span class="at">seed =</span> <span class="dv">82</span>)   <span class="co"># mide</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>th_te <span class="ot">&lt;-</span> <span class="fu">predict</span>(cf_tr, X[te, ])<span class="sc">$</span>predictions; sc <span class="ot">&lt;-</span> <span class="fu">get_scores</span>(cf_ev)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="fu">rank</span>(th_te, <span class="at">ties.method =</span> <span class="st">"first"</span>), <span class="dv">5</span>, <span class="at">labels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">rbind</span>(<span class="at">GATES =</span> <span class="fu">tapply</span>(sc, q, mean), <span class="at">verdad =</span> <span class="fu">tapply</span>(tau[te], q, mean)), <span class="dv">2</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           1    2    3    4    5
+GATES  -0.05 0.87 2.72 3.94 6.51
+verdad  0.49 1.41 2.59 3.96 6.64</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sapply</span>(<span class="fu">list</span>(<span class="at">efecto =</span> th_te, <span class="at">riesgo =</span> df<span class="sc">$</span>riesgo[te], <span class="at">gasto =</span> df<span class="sc">$</span>gasto_prev[te]),</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>       <span class="cf">function</span>(p) <span class="fu">rank_average_treatment_effect</span>(cf_ev, p, <span class="at">target =</span> <span class="st">"AUTOC"</span>)<span class="sc">$</span>estimate)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    efecto     riesgo      gasto 
+ 2.2563669 -0.1719343 -1.8802178 </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># GATES con el DR-learner: orden aprendido en una mitad, aportes AIPW (cross-fitting) en la otra</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>th_dr <span class="op">=</span> cml.meta_dr(Y[tr], D[tr], X[tr], X[te])</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>mu0, mu1, e <span class="op">=</span> cml.nuisance_aipw(Y[te], D[te], X[te])<span class="op">;</span> g <span class="op">=</span> cml.aipw_scores(Y[te], D[te], mu0, mu1, e)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>q <span class="op">=</span> pd.qcut(pd.Series(th_dr).rank(method<span class="op">=</span><span class="st">"first"</span>), <span class="dv">5</span>, labels<span class="op">=</span><span class="va">False</span>) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>pd.DataFrame({<span class="st">"GATES"</span>: pd.Series(g).groupby(q).mean(), <span class="st">"verdad"</span>: pd.Series(tau[te]).groupby(q).mean()}).T.<span class="bu">round</span>(<span class="dv">2</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           1     2     3     4     5
+GATES   0.36  1.49  2.31  3.87  6.20
+verdad  0.72  1.81  2.70  3.80  6.04</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/img/cml/cml_toc.png" class="still img-fluid figure-img"></p>
+<figcaption>Curva TOC en la mitad de prueba: ordenar por efecto estimado separa bien; por riesgo de fuga, no mejor que el azar; por gasto previo, al revés.</figcaption>
+</figure>
+</div>
+<p>En SuperCápsula los GATES suben de -0,0 a 6,5 mil (los verdaderos, de 0,5 a 6,6). El RATE ordenando por efecto estimado es 2,3; por riesgo de fuga, -0,2; por gasto previo, -1,9.</p>
+<div class="box warn">
+<p>Un histograma disperso de CATE <strong>no prueba</strong> heterogeneidad: el T-learner dibuja montañas donde no hay. Lo que se valida es si la escalera sube y si la curva TOC está por encima de cero.</p>
+</div>
+</section>
+<section id="hiperpersonalización-decidir" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="hiperpersonalización-decidir"><span class="header-section-number">5.6</span> Hiperpersonalización = decidir</h2>
+<p>La regla: <strong>mandar el cupón si el CATE estimado supera el costo</strong>. Las alternativas habituales focalizan por gasto previo (los mejores clientes) o por riesgo de fuga (los que hay que retener). Las comparamos en la mitad de prueba, mandando el cupón a la misma cantidad de clientes que elige el bosque, y medimos la ganancia con el efecto verdadero (el caso es sintético).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/img/cml/cml_s9.png" class="still img-fluid figure-img"></p>
+<figcaption>Ganancia de cada política, descontado el costo del cupón.</figcaption>
+</figure>
+</div>
+<p>Por cada mil clientes, en millones de pesos: a todos, 1,02; por gasto previo, 0,05 (los que más gastan son los fieles, y a ellos el cupón no les cambia nada); por riesgo de fuga, 0,79, <strong>menos que mandárselo a todos</strong> (muchos se van por un competidor o un reclamo, y un cupón no los retiene); por efecto estimado, 1,43; si se conociera el efecto de cada uno, 1,50. Sin conocer la verdad, con los aportes AIPW de la mitad de prueba, el orden es el mismo (por efecto 1,35, a todos 0,80, por riesgo 0,67).</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset" data-group="lang">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href="">R</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href="">Python</a></li></ul>
+<div class="tab-content" data-group="lang">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">mean</span>(th_te <span class="sc">&gt;</span> COSTO) <span class="sc">*</span> <span class="fu">length</span>(te)); top <span class="ot">&lt;-</span> <span class="cf">function</span>(s) { m <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">FALSE</span>, <span class="fu">length</span>(s)); m[<span class="fu">order</span>(<span class="sc">-</span>s)[<span class="dv">1</span><span class="sc">:</span>k]] <span class="ot">&lt;-</span> <span class="cn">TRUE</span>; m }</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>pol <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">todos =</span> <span class="fu">rep</span>(<span class="cn">TRUE</span>, <span class="fu">length</span>(te)), <span class="at">gasto =</span> <span class="fu">top</span>(df<span class="sc">$</span>gasto_prev[te]), <span class="at">riesgo =</span> <span class="fu">top</span>(df<span class="sc">$</span>riesgo[te]), <span class="at">efecto =</span> th_te <span class="sc">&gt;</span> COSTO, <span class="at">oraculo =</span> tau[te] <span class="sc">&gt;</span> COSTO)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">sapply</span>(pol, <span class="cf">function</span>(m) <span class="fu">c</span>(<span class="at">verdad =</span> <span class="fu">mean</span>(m <span class="sc">*</span> (tau[te] <span class="sc">-</span> COSTO)), <span class="at">aipw =</span> <span class="fu">mean</span>(m <span class="sc">*</span> (sc <span class="sc">-</span> COSTO)))), <span class="dv">2</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       todos gasto riesgo efecto oraculo
+verdad  1.02  0.05   0.79   1.43    1.50
+aipw    0.80 -0.09   0.67   1.35    1.41</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>q_ <span class="op">=</span> (th_dr <span class="op">&gt;</span> <span class="dv">2</span>).mean()<span class="op">;</span> k <span class="op">=</span> <span class="bu">int</span>(<span class="bu">round</span>(q_ <span class="op">*</span> <span class="bu">len</span>(te)))<span class="op">;</span> top <span class="op">=</span> <span class="kw">lambda</span> s: np.isin(np.arange(<span class="bu">len</span>(s)), np.argsort(<span class="op">-</span>s)[:k])</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>P <span class="op">=</span> {<span class="st">"todos"</span>: np.ones(<span class="bu">len</span>(te), <span class="bu">bool</span>), <span class="st">"gasto"</span>: top(df.gasto_prev.to_numpy()[te]), <span class="st">"riesgo"</span>: top(df.riesgo.to_numpy()[te]), <span class="st">"efecto"</span>: th_dr <span class="op">&gt;</span> <span class="dv">2</span>, <span class="st">"oraculo"</span>: tau[te] <span class="op">&gt;</span> <span class="dv">2</span>}</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>pd.Series({n: np.mean(m <span class="op">*</span> (tau[te] <span class="op">-</span> <span class="dv">2</span>)) <span class="cf">for</span> n, m <span class="kw">in</span> P.items()}).<span class="bu">round</span>(<span class="dv">2</span>)   <span class="co"># con el DR-learner como CATE</span></span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>todos      1.01
+gasto      0.13
+riesgo     0.84
+efecto     1.31
+oraculo    1.49
+dtype: float64</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="box paper" data-label="Del paper · Predecir no es decidir">
+<p>Focalizar a los clientes con más riesgo de fuga puede no servir <span class="citation" data-cites="ascarza2018">(<a href="arboles.html#ref-ascarza2018" role="doc-biblioref">Ascarza 2018</a>)</span>. En un experimento con 53.000 estudiantes, focalizar por efecto estimado rindió mucho más que focalizar por riesgo predicho <span class="citation" data-cites="akl2025">(<a href="arboles.html#ref-akl2025" role="doc-biblioref">Athey et&nbsp;al. 2025</a>)</span> (páginas sin confirmar). Para decidir bien no hace falta estimar bien la magnitud del efecto: importa el <strong>orden</strong> <span class="citation" data-cites="fernandezloria2022">(<a href="arboles.html#ref-fernandezloria2022" role="doc-biblioref">Fernández-Loría y Provost 2022</a>)</span>. Las políticas se pueden aprender directamente con aportes doblemente robustos <span class="citation" data-cites="atheywager2021">(<a href="arboles.html#ref-atheywager2021" role="doc-biblioref">Athey y Wager 2021</a>)</span>.</p>
+</div>
+<div class="box warn" data-label="Ojo · Dos cautelas">
+<ol type="1">
+<li>El efecto de cada cliente es ruidoso: decide con el orden y con grupos, no con el número exacto de una persona.</li>
+<li>Antes de cambiar la política a gran escala, <strong>valídala con un experimento</strong> (por ejemplo, un grupo al azar que siga recibiendo el cupón como antes).</li>
+</ol>
+</div>
+</section>
+<section id="ejercicios" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="ejercicios">Ejercicios</h2>
+<div class="box turn" data-label="Tu turno · 1">
+<p>Con el bosque <code>cf</code>, calcula el CATE promedio de los clientes <strong>Oro</strong> (gasto previo &gt; 30 y antigüedad &gt; 24) y del resto. ¿A cuál grupo le mandó más cupones marketing? ¿A cuál le sirve más?</p>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>oro <span class="ot">&lt;-</span> df<span class="sc">$</span>gasto_prev <span class="sc">&gt;</span> <span class="dv">30</span> <span class="sc">&amp;</span> df<span class="sc">$</span>antiguedad <span class="sc">&gt;</span> <span class="dv">24</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">cate_oro =</span> <span class="fu">mean</span>(tau_oob<span class="sc">$</span>predictions[oro]), <span class="at">cate_resto =</span> <span class="fu">mean</span>(tau_oob<span class="sc">$</span>predictions[<span class="sc">!</span>oro]),</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">cupon_oro =</span> <span class="fu">mean</span>(W[oro]), <span class="at">cupon_resto =</span> <span class="fu">mean</span>(W[<span class="sc">!</span>oro]))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Marketing le mandó el cupón a 79 de cada 100 clientes Oro y a 29 del resto, pero el CATE de los Oro es mucho menor: son clientes fieles que compran igual. La regla de marketing focalizaba al revés.</p>
+</div>
+</div>
+</div>
+<div class="box turn" data-label="Tu turno · 2">
+<p>Repite los GATES ordenando a los clientes por <strong>riesgo de fuga</strong> en vez de por CATE estimado. ¿Sube la escalera?</p>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>q2 <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="fu">rank</span>(df<span class="sc">$</span>riesgo[te], <span class="at">ties.method =</span> <span class="st">"first"</span>), <span class="dv">5</span>, <span class="at">labels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>); <span class="fu">round</span>(<span class="fu">tapply</span>(sc, q2, mean), <span class="dv">2</span>)</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>La escalera queda casi plana: el riesgo de fuga no ordena a los clientes según cuánto les cambia el cupón (el RATE por riesgo es -0,2).</p>
+</div>
+</div>
+</div>
+<div class="box turn" data-label="Tu turno · 3">
+<p>Si el cupón costara 4 mil en vez de 2, ¿a qué fracción de clientes habría que mandárselo según el bosque? ¿Cuánto se ganaría, por cada mil clientes, con la política por efecto y con mandárselo a todos?</p>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solución
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="at">fraccion =</span> <span class="fu">mean</span>(th_te <span class="sc">&gt;</span> <span class="dv">4</span>), <span class="at">por_efecto =</span> <span class="fu">mean</span>((th_te <span class="sc">&gt;</span> <span class="dv">4</span>) <span class="sc">*</span> (tau[te] <span class="sc">-</span> <span class="dv">4</span>)), <span class="at">todos =</span> <span class="fu">mean</span>(tau[te] <span class="sc">-</span> <span class="dv">4</span>))</span></code></pre></div><button title="Copiar al portapapeles" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Mandárselo a todos pasa a <strong>perder</strong> plata (el efecto promedio es menor que 4); la política por efecto sigue ganando, porque solo trata a quienes tienen un efecto grande.</p>
+</div>
+</div>
+</div>
+<div class="box paper" data-label="Estado del arte · revisado 18-nov-2026">
+<p>Este capítulo se armó a partir de un sondeo de la literatura (<em>surveys</em> primero, luego papers de 2021–2026 y el software vigente):</p>
+<ul>
+<li><strong>Meta-learners:</strong> Künzel et al.&nbsp;(2019) para S, T y X <span class="citation" data-cites="kunzel2019">(<a href="arboles.html#ref-kunzel2019" role="doc-biblioref">Künzel et&nbsp;al. 2019</a>)</span>; Nie y Wager (2021) para el R-learner <span class="citation" data-cites="nie2021">(<a href="arboles.html#ref-nie2021" role="doc-biblioref">Nie y Wager 2021</a>)</span>; Kennedy (2023) para el DR-learner <span class="citation" data-cites="kennedy2023">(<a href="arboles.html#ref-kennedy2023" role="doc-biblioref">Kennedy 2023</a>)</span>.</li>
+<li><strong>Árbol y bosque causal:</strong> Athey e Imbens (2016), honestidad <span class="citation" data-cites="atheyimbens2016">(<a href="arboles.html#ref-atheyimbens2016" role="doc-biblioref">Athey y Imbens 2016</a>)</span>; Wager y Athey (2018) <span class="citation" data-cites="wager2018">(<a href="arboles.html#ref-wager2018" role="doc-biblioref">Wager y Athey 2018</a>)</span>; Athey, Tibshirani y Wager (2019), el bosque como pesos locales y residuos (lo que implementa <code>grf</code>) <span class="citation" data-cites="athey2019grf">(<a href="arboles.html#ref-athey2019grf" role="doc-biblioref">Athey et&nbsp;al. 2019</a>)</span>.</li>
+<li><strong>Validar la heterogeneidad:</strong> Chernozhukov, Demirer, Duflo y Fernández-Val (2025), GATES <span class="citation" data-cites="cddf2025">(<a href="arboles.html#ref-cddf2025" role="doc-biblioref">Chernozhukov et&nbsp;al. 2025</a>)</span>; Yadlowsky et al.&nbsp;(2025), RATE y curva TOC <span class="citation" data-cites="yadlowsky2025">(<a href="arboles.html#ref-yadlowsky2025" role="doc-biblioref">Yadlowsky et&nbsp;al. 2025</a>)</span>.</li>
+<li><strong>Decidir:</strong> Athey y Wager (2021) <span class="citation" data-cites="atheywager2021">(<a href="arboles.html#ref-atheywager2021" role="doc-biblioref">Athey y Wager 2021</a>)</span>; Ascarza (2018) <span class="citation" data-cites="ascarza2018">(<a href="arboles.html#ref-ascarza2018" role="doc-biblioref">Ascarza 2018</a>)</span>; Athey, Keleher y Spiess (2025) <span class="citation" data-cites="akl2025">(<a href="arboles.html#ref-akl2025" role="doc-biblioref">Athey et&nbsp;al. 2025</a>)</span>; Fernández-Loría y Provost (2022) <span class="citation" data-cites="fernandezloria2022">(<a href="arboles.html#ref-fernandezloria2022" role="doc-biblioref">Fernández-Loría y Provost 2022</a>)</span>.</li>
+<li><strong>Debates:</strong> honestidad <span class="citation" data-cites="hou2025honesty">(<a href="arboles.html#ref-hou2025honesty" role="doc-biblioref"><span class="nocase">Hou et&nbsp;al.</span> 2025</a>)</span>; el efecto individual es ruidoso <span class="citation" data-cites="knaus2022">(<a href="arboles.html#ref-knaus2022" role="doc-biblioref">Knaus 2022</a>)</span>.</li>
+<li>Software: <code>grf</code> 2.6.1 (R) y <code>econml</code> 0.17.1 (Python).</li>
+</ul>
+</div>
+</section>
+<section id="referencias" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="referencias">Referencias</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-ascarza2018" class="csl-entry" role="listitem">
+Ascarza, Eva. 2018. <span>«Retention Futility: Targeting High-Risk Customers Might Be Ineffective»</span>. <em>Journal of Marketing Research</em> 55 (1): 80-98.
+</div>
+<div id="ref-atheyimbens2016" class="csl-entry" role="listitem">
+Athey, Susan, y Guido Imbens. 2016. <span>«Recursive partitioning for heterogeneous causal effects»</span>. <em>Proceedings of the National Academy of Sciences</em> 113 (27): 7353-60. <a href="https://doi.org/10.1073/pnas.1510489113">https://doi.org/10.1073/pnas.1510489113</a>.
+</div>
+<div id="ref-akl2025" class="csl-entry" role="listitem">
+Athey, Susan, Niall Keleher, y Jann Spiess. 2025. <span>«Machine learning who to nudge: Causal vs predictive targeting in a field experiment on student financial aid renewal»</span>. <em>Journal of Econometrics</em> 249. <a href="https://arxiv.org/abs/2310.08672">https://arxiv.org/abs/2310.08672</a>.
+</div>
+<div id="ref-athey2019grf" class="csl-entry" role="listitem">
+Athey, Susan, Julie Tibshirani, y Stefan Wager. 2019. <span>«Generalized random forests»</span>. <em>The Annals of Statistics</em> 47 (2): 1148-78. <a href="https://doi.org/10.1214/18-AOS1709">https://doi.org/10.1214/18-AOS1709</a>.
+</div>
+<div id="ref-atheywager2021" class="csl-entry" role="listitem">
+Athey, Susan, y Stefan Wager. 2021. <span>«Policy Learning With Observational Data»</span>. <em>Econometrica</em> 89 (1): 133-61.
+</div>
+<div id="ref-cddf2025" class="csl-entry" role="listitem">
+Chernozhukov, Victor, Mert Demirer, Esther Duflo, y Iván Fernández-Val. 2025. <span>«Fisher–Schultz Lecture: Generic Machine Learning Inference on Heterogeneous Treatment Effects in Randomized Experiments, With an Application to Immunization in India»</span>. <em>Econometrica</em> 93 (4): 1121-64. <a href="https://doi.org/10.3982/ECTA19303">https://doi.org/10.3982/ECTA19303</a>.
+</div>
+<div id="ref-fernandezloria2022" class="csl-entry" role="listitem">
+Fernández-Loría, Carlos, y Foster Provost. 2022. <span>«Causal Decision Making and Causal Effect Estimation Are Not the Same…and Why It Matters»</span>. <em>INFORMS Journal on Data Science</em> 1 (1): 4-16.
+</div>
+<div id="ref-hou2025honesty" class="csl-entry" role="listitem">
+<span class="nocase">Hou et&nbsp;al.</span> 2025. <em>Honesty in Causal Forests: When It Helps and When It Hurts</em>. arXiv:2506.13107. <a href="https://arxiv.org/abs/2506.13107">https://arxiv.org/abs/2506.13107</a>.
+</div>
+<div id="ref-kennedy2023" class="csl-entry" role="listitem">
+Kennedy, Edward H. 2023. <span>«Towards optimal doubly robust estimation of heterogeneous causal effects»</span>. <em>Electronic Journal of Statistics</em> 17 (2): 3008-49. <a href="https://arxiv.org/abs/2004.14497">https://arxiv.org/abs/2004.14497</a>.
+</div>
+<div id="ref-knaus2022" class="csl-entry" role="listitem">
+Knaus, Michael C. 2022. <span>«Double machine learning-based programme evaluation under unconfoundedness»</span>. <em>The Econometrics Journal</em> 25 (3): 602-27. <a href="https://doi.org/10.1093/ectj/utac015">https://doi.org/10.1093/ectj/utac015</a>.
+</div>
+<div id="ref-kunzel2019" class="csl-entry" role="listitem">
+Künzel, Sören R., Jasjeet S. Sekhon, Peter J. Bickel, y Bin Yu. 2019. <span>«Metalearners for estimating heterogeneous treatment effects using machine learning»</span>. <em>Proceedings of the National Academy of Sciences</em> 116 (10): 4156-65. <a href="https://arxiv.org/abs/1706.03461">https://arxiv.org/abs/1706.03461</a>.
+</div>
+<div id="ref-nie2021" class="csl-entry" role="listitem">
+Nie, Xinkun, y Stefan Wager. 2021. <span>«Quasi-oracle estimation of heterogeneous treatment effects»</span>. <em>Biometrika</em> 108 (2): 299-319. <a href="https://arxiv.org/abs/1712.04912">https://arxiv.org/abs/1712.04912</a>.
+</div>
+<div id="ref-wager2018" class="csl-entry" role="listitem">
+Wager, Stefan, y Susan Athey. 2018. <span>«Estimation and Inference of Heterogeneous Treatment Effects using Random Forests»</span>. <em>Journal of the American Statistical Association</em> 113 (523): 1228-42.
+</div>
+<div id="ref-yadlowsky2025" class="csl-entry" role="listitem">
+Yadlowsky, Steve, Scott Fleming, Nigam Shah, Emma Brunskill, y Stefan Wager. 2025. <span>«Evaluating Treatment Prioritization Rules via Rank-Weighted Average Treatment Effects»</span>. <em>Journal of the American Statistical Association</em> 120 (549): 38-51. <a href="https://doi.org/10.1080/01621459.2024.2393466">https://doi.org/10.1080/01621459.2024.2393466</a>.
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copiado");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copiado");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./causal_ml_1.html" class="pagination-link" aria-label="Causal ML (1): del control lineal al Double ML">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Causal ML (1): del control lineal al Double ML</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
