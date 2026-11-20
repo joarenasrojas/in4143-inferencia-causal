@@ -1,0 +1,7 @@
+politica,frac_con_cupon,ganancia_por_cliente,efecto_medio_tratados
+nadie,0.0,0.0,
+todos,1.0,1.02426335,3.02426335
+por gasto previo,0.65,0.03167052,2.048723876923077
+por riesgo de fuga,0.65,0.75630111,3.163540169230769
+por efecto estimado,0.65,1.34509544,4.0693776
+oráculo (efecto verdadero),0.6004,1.5010721,4.500120086608927
