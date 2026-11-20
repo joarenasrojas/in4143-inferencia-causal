@@ -23,8 +23,12 @@ s4 <- V$s4; s2 <- V$s2; s3 <- V$s3; s5 <- V$s5; seis <- V$seis
 - El ML **no arregla la identificación**: confusores no observados, malos controles y falta de traslape siguen ahí.
 :::
 
+<div class="vidwin">
+<iframe src="https://www.youtube-nocookie.com/embed/fuj2B0mJbrc" title="Causal ML · Parte 1 · IN4143" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+</div>
+
 ::: {.box .noicon}
-**Video.** Este capítulo acompaña al video «Causal ML · Parte 1: ¿Funcionó el cupón?» (disponible próximamente). Las imágenes del capítulo son fotogramas de ese video.
+**Video.** Este capítulo acompaña al video [«Causal ML · Parte 1: ¿Funcionó el cupón?»](https://youtu.be/fuj2B0mJbrc). Las imágenes del capítulo son fotogramas de ese video.
 :::
 
 ## Preparación {.unnumbered}
