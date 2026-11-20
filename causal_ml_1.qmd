@@ -68,7 +68,7 @@ pd.Series({"clientes": len(df), "con_cupon": D.mean(), "ate_verdadero": df.tau.m
 :::
 
 ::: {.box .warn}
-Los bosques de R (`ranger`) y de Python (`scikit-learn`) no son idénticos, así que las cifras con *machine learning* **difieren en el segundo decimal** entre pestañas. Las del texto y las figuras son las de las simulaciones del tema (`05 Causal ML/codigo`, Python; el bosque causal del capítulo 2, `grf` en R).
+Los bosques de R (`ranger`) y de Python (`scikit-learn`) no son idénticos, así que las cifras con *machine learning* **difieren en el segundo decimal** entre pestañas. Las del texto y las figuras son las de las simulaciones del tema (`05 Causal ML/codigo`, Python; el bosque causal del [capítulo siguiente](causal_ml_2.qmd), `grf` en R).
 :::
 
 ## El caso: comparar promedios
@@ -373,7 +373,7 @@ Este capítulo se armó a partir de un sondeo de la literatura (*surveys* primer
 - **Ahrens et al. (2025)**, la introducción de referencia a Double ML [@ahrens2025], y el paper original de **Chernozhukov et al. (2018)** [@chernozhukov2018]. El libro abierto de **Chernozhukov, Hansen, Kallus, Spindler y Syrgkanis** tiene el mismo arco, con *notebooks* en R y Python [@cck2024].
 - **Robinson (1988)** para el puente entre FWL y lo no lineal [@robinson1988]; **Robins et al. (1994)** y **Bang y Robins (2005)** para lo doblemente robusto [@robins1994; @bangrobins2005].
 - **Bach et al. (2024)** sobre afinar hiperparámetros [@bach2024tuning]; **Hünermund et al. (2023)** sobre malos controles [@hunermund2023]; **Knaus (2022)**, guía aplicada [@knaus2022].
-- Software: `DoubleML` en R y Python [@doubleml2024]; `grf` (R) y `econml` (Python) en el capítulo 2.
+- Software: `DoubleML` en R y Python [@doubleml2024]; `grf` (R) y `econml` (Python) en el [capítulo siguiente](causal_ml_2.qmd).
 :::
 
 ## Referencias {.unnumbered}

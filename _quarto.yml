@@ -15,16 +15,12 @@ book:
   chapters:
     - index.qmd
     - arboles.qmd
+    - causal_ml_1.qmd
+    - causal_ml_2.qmd
     - part: "Material complementario"
       chapters:
         - errores_estandar.qmd
-    - part: "Enfoque bayesiano"
-      chapters:
         - test_and_roll.qmd
-    - part: "Causal Machine Learning"
-      chapters:
-        - causal_ml_1.qmd
-        - causal_ml_2.qmd
   sidebar:
     style: floating
   page-navigation: true

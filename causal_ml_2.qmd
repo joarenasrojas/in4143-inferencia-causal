@@ -21,7 +21,7 @@ ra <- setNames(V$s8_rate, sapply(V$s8_rate, `[[`, "prioridad"))
 
 - El efecto **promedio** puede esconder clientes a los que el cupón les cambia mucho la conducta y otros a los que no les cambia nada. El **CATE** separa esos efectos según las características.
 - De cada cliente vemos **un solo mundo** (con o sin cupón): no hay «respuesta correcta» para medir el error del CATE como en una predicción cualquiera.
-- Los **meta-learners** (S, T, X, R, DR) arman el CATE con modelos de predicción comunes. El R y el DR son las ideas del capítulo 1, cliente a cliente.
+- Los **meta-learners** (S, T, X, R, DR) arman el CATE con modelos de predicción comunes. El R y el DR son las ideas del [capítulo anterior](causal_ml_1.qmd), cliente a cliente.
 - El **árbol causal** corta buscando efectos distintos; la **honestidad** separa los datos que eligen los cortes de los que miden. El **bosque causal** es residuo sobre residuo en el barrio de cada cliente [@wager2018; @athey2019grf].
 - No se valida el efecto de cada cliente: se valida el **orden** (GATES, curva TOC y RATE). Y se decide **por efecto**, no por riesgo ni por gasto.
 :::
@@ -36,7 +36,7 @@ ra <- setNames(V$s8_rate, sapply(V$s8_rate, `[[`, "prioridad"))
 
 ## Preparación {.unnumbered}
 
-Seguimos con **SuperCápsula** y su cupón (capítulo 1). El cupón cuesta **`r f1(V$caso$costo)` mil pesos** por cliente y sube el gasto en `r f2(V$caso$ate)` mil en promedio: mandárselo a todos «conviene». La pregunta ahora es **a quién**.
+Seguimos con **SuperCápsula** y su cupón ([capítulo anterior](causal_ml_1.qmd)). El cupón cuesta **`r f1(V$caso$costo)` mil pesos** por cliente y sube el gasto en `r f2(V$caso$ate)` mil en promedio: mandárselo a todos «conviene». La pregunta ahora es **a quién**.
 
 ::: {.panel-tabset group="lang"}
 ## R
@@ -78,7 +78,7 @@ $$\tau(x) = \mathbb E\left[\,Y(1) - Y(0) \mid X = x\,\right].$$
 Sirve para **decidir a quién tratar**: mandar el cupón si $\tau(x)$ supera su costo. En nuestros datos, `r pc(V$caso$frac_tau_mayor_costo)` de cada 100 clientes tienen un efecto verdadero mayor que `r f1(V$caso$costo)`.
 :::
 
-**El problema de fondo.** De cada cliente vemos un solo mundo. Para predecir el gasto comparamos la predicción con el gasto real; para el efecto de un cliente **no hay respuesta correcta** con la cual comparar. Por eso los métodos de este capítulo se arman con las ideas del capítulo 1 y se validan **por grupos y por el orden** en que ponen a los clientes.
+**El problema de fondo.** De cada cliente vemos un solo mundo. Para predecir el gasto comparamos la predicción con el gasto real; para el efecto de un cliente **no hay respuesta correcta** con la cual comparar. Por eso los métodos de este capítulo se arman con las ideas del [capítulo anterior](causal_ml_1.qmd) y se validan **por grupos y por el orden** en que ponen a los clientes.
 
 ![Le llega el cupón al teléfono. Su gemelo sin cupón nunca existe.](assets/img/cml/v2_casa.webp){.still}
 
@@ -90,17 +90,17 @@ Una **receta** que arma el CATE con modelos de predicción comunes (bosques, *bo
 
 | | Receta | Ojo |
 |---|---|---|
-| **S** | 1) Un modelo del gasto con D y X juntos. 2) Predecir a cada cliente con D = 1 y con D = 0. 3) Restar. | Es el «atajo» del capítulo 1: regulariza el cupón y **encoge** el efecto. |
+| **S** | 1) Un modelo del gasto con D y X juntos. 2) Predecir a cada cliente con D = 1 y con D = 0. 3) Restar. | Es el «atajo» del [capítulo anterior](causal_ml_1.qmd): regulariza el cupón y **encoge** el efecto. |
 | **T** | 1) Un modelo del gasto solo con los con cupón. 2) Otro solo con los sin cupón. 3) Predecir con los dos y restar. | Los errores de los dos modelos se suman: **inventa diferencias**, sobre todo si un grupo es chico. |
 | **X** | 1) Los dos modelos del T. 2) Cruzarlos: efecto imputado $Y - \hat\mu_0(X)$ para los con cupón y $\hat\mu_1(X) - Y$ para los sin cupón. 3) Predecir esos efectos con X en cada grupo y promediar, con más peso al grupo grande. | Pensado para grupos desbalanceados [@kunzel2019]. |
 | **R** | 1) Residuos del gasto y del cupón, con *cross-fitting*. 2) Buscar una pendiente que cambie con X: regresar $\tilde Y/\tilde D$ sobre X con pesos $\tilde D^2$. | Es FWL otra vez, cliente a cliente [@nie2021]. |
-| **DR** | 1) El aporte AIPW de cada cliente (capítulo 1), su **pseudo-resultado**. 2) Predecirlo con X. | La ruta doblemente robusta, cliente a cliente [@kennedy2023]. |
+| **DR** | 1) El aporte AIPW de cada cliente ([capítulo anterior](causal_ml_1.qmd)), su **pseudo-resultado**. 2) Predecirlo con X. | La ruta doblemente robusta, cliente a cliente [@kennedy2023]. |
 
 : Los cinco meta-learners, paso a paso. {.striped}
 
-![El R-learner: las bandejas de residuos del capítulo 1, con una pendiente para los ocasionales (amarillo) y otra para los fieles (rosado).](assets/img/cml/v2_r.webp){.still}
+![El R-learner: las bandejas de residuos del [capítulo anterior](causal_ml_1.qmd), con una pendiente para los ocasionales (amarillo) y otra para los fieles (rosado).](assets/img/cml/v2_r.webp){.still}
 
-Con los mismos residuos del capítulo 1, la pendiente de residuo sobre residuo es `r f1(V$s4_por_grupo$ocasionales)` entre los ocasionales (menos de `r V$s4_por_grupo$corte` compras al mes) y `r f1(V$s4_por_grupo$fieles)` entre los fieles: esa es la intuición del R-learner.
+Con los mismos residuos del [capítulo anterior](causal_ml_1.qmd), la pendiente de residuo sobre residuo es `r f1(V$s4_por_grupo$ocasionales)` entre los ocasionales (menos de `r V$s4_por_grupo$corte` compras al mes) y `r f1(V$s4_por_grupo$fieles)` entre los fieles: esa es la intuición del R-learner.
 
 ::: {.panel-tabset group="lang"}
 ## R
@@ -133,7 +133,7 @@ pd.Series({k: np.sqrt(np.mean((v - tau[te]) ** 2)) for k, v in th.items()}).roun
 En el caso, el error es `r f2(s6c$S$rmse)` para el S, `r f2(s6c$T$rmse)` para el T, `r f2(s6c$X$rmse)` para el X, `r f2(s6c$R$rmse)` para el R y `r f2(s6c$DR$rmse)` para el DR. En la simulación con efecto 3 para todos y `r pc(V$s6_frac_pocos)`% con cupón, el S promedia `r f1(s6p$S$media)` (**encoge**) y el T dice que el efecto varía `r f1(s6p$T$sd)` mil entre clientes (**inventa diferencias**), cuando no varía nada; el X varía `r f1(s6p$X$sd)`.
 
 ::: {.box .warn label="Ojo · R y DR con un bosque común"}
-La idea del R y del DR es la correcta (protegen contra la confusión, como en el capítulo 1), pero **con un bosque común en la última etapa quedaron ruidosos**: la última etapa predice un pseudo-resultado muy ruidoso con un modelo hecho para predecir gastos. El bosque causal es, justamente, una forma cuidadosa de hacer el R-learner, y baja el error a `r f2(s8$rmse_cate)`.
+La idea del R y del DR es la correcta (protegen contra la confusión, como en el [capítulo anterior](causal_ml_1.qmd)), pero **con un bosque común en la última etapa quedaron ruidosos**: la última etapa predice un pseudo-resultado muy ruidoso con un modelo hecho para predecir gastos. El bosque causal es, justamente, una forma cuidadosa de hacer el R-learner, y baja el error a `r f2(s8$rmse_cate)`.
 :::
 
 ## Pista 2 · El árbol causal y la honestidad

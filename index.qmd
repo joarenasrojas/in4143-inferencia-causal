@@ -45,10 +45,10 @@ El código viene en dos pestañas, **R** y **Python**. Elige una y el resto del 
 
 1. [Árboles de decisión](arboles.qmd): regresión y clasificación, cómo elige cada corte, sobreajuste, sesgo y varianza, validación cruzada, poda, métricas, bosques y boosting.
 
+2. [Causal ML (1): del control lineal al Double ML](causal_ml_1.qmd): controlar es limpiar (Frisch, Waugh y Lovell), *cross-fitting*, la receta de Double ML, el estimador doblemente robusto y lo que el *machine learning* no arregla.
+3. [Causal ML (2): efectos heterogéneos y personalización](causal_ml_2.qmd): el CATE, los *meta-learners*, árbol causal y honestidad, bosque causal, validar el orden (GATES, TOC y RATE) y decidir a quién tratar.
+
 **Material complementario**
 
-2. [Errores estándar](errores_estandar.qmd): qué incertidumbre miden, a qué nivel agrupar, la receta moderna (CV1, *jackknife* y *wild cluster bootstrap*), pocos clústeres tratados, aleatorización, método delta, tests A/A y placebos.
-
-**Enfoque bayesiano**
-
-3. [Test & Roll](test_and_roll.qmd): A/B tests para decidir, la regla de elegir al ganador, el tamaño óptimo del test, de dónde sale el *prior*, el *holdout* chico y Thompson sampling.
+4. [Errores estándar](errores_estandar.qmd): qué incertidumbre miden, a qué nivel agrupar, la receta moderna (CV1, *jackknife* y *wild cluster bootstrap*), pocos clústeres tratados, aleatorización, método delta, tests A/A y placebos.
+5. [Test & Roll](test_and_roll.qmd): A/B tests para decidir, la regla de elegir al ganador, el tamaño óptimo del test, de dónde sale el *prior*, el *holdout* chico y Thompson sampling.
